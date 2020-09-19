@@ -1,56 +1,48 @@
 import 'package:flutter/material.dart';
-import 'recipeView.dart';
+import 'Pages/edit_page.dart';
+import 'Pages/recipes_page.dart';
 
 class AppState extends State<App> {
-  int _selectedIndex = 0;
-  // static const TextStyle optionStyle =
-  //     TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  List<Widget> _widgetOptions = <Widget>[
-    RecipeView(),
-    Text(
-      'Index 1: Ur ded',
-      //style: optionStyle,
+  int _currentIndex = 0;
+  final List<Widget> _navButtons = <Widget>[
+    Center(
+      child: Text(
+        'Swift Search',
+      ),
     ),
-    Text(
-      'Index 2: Ur stepbro',
-      //style: optionStyle,
-    ),
+    RecipesPage(),
+    EditPage(),
   ];
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      _currentIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('BottomNavigationBar Sample'),
-      ),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
+      body: _navButtons[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text('Home'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.business),
-            title: Text('Business'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            title: Text('School'),
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,
-      ),
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.search),
+              title: Text('Lookup'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.book),
+              title: Text('Recipes'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.edit),
+              title: Text('Edit'),
+            ),
+          ],
+          currentIndex: _currentIndex,
+          selectedItemColor: Colors.purple[200],
+          onTap: _onItemTapped,
+          type: BottomNavigationBarType.fixed),
     );
   }
 }
