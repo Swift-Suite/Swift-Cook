@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-class RecipeView extends StatefulWidget {
+class SavedRecipe extends StatefulWidget {
   @override
-  RecipeViewState createState() => RecipeViewState();
+  SavedRecipeState createState() => SavedRecipeState();
 }
 
-class RecipeViewState extends State<RecipeView> {
+class SavedRecipeState extends State<SavedRecipe> {
   @override
   Widget build(BuildContext context) {
     return Text(
-      "recipeView",
+      "SavedRecipe",
       style: TextStyle(
         fontSize: 20.0,
       ),
