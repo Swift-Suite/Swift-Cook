@@ -29,8 +29,8 @@ class RecipesPageState extends State<RecipesPage> {
       ),
       body: Center(
         child: canEdit == false
-            ? Text("Pls Gimme the Spaghet Bos")
-            : Text("Pls Don't Gimme the Spaghet Bos"),
+            ? Text("Pls Gimme the Spaghet Bos 🍝")
+            : Text("Pls Don't Gimme the Spaghet Bos 🚷"),
       ),
       backgroundColor: Colors.lightBlue[100],
     );

@@ -15,7 +15,7 @@ void openPage(BuildContext context) {
         ),
         body: const Center(
           child: Text(
-            'LOLOLOL',
+            '🔥🔥🔥🔥🔥🔥LOLOL69420LOLOL🔥🔥🔥🔥🔥🔥',
             style: TextStyle(fontSize: 24),
           ),
         ),
