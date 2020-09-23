@@ -2,14 +2,15 @@
 
 import 'package:swiftcook/model/ingredient.dart';
 import 'package:swiftcook/model/instruction.dart';
+import 'package:swiftcook/model/serializable.dart';
 
-class Recipe {
+class Recipe extends Serializable {
   static final String kTitle = "title";
   static final String kImageUrl = "imageUrl";
   static final String kIngredientList = "ingredientList";
   static final String kInstructionList = "instructionList";
 
-  static final List<String> keyList = [
+  static final List<String> _keyList = [
     kTitle,
     kImageUrl,
     kIngredientList,
@@ -22,6 +23,21 @@ class Recipe {
   List<Instruction> instructionList;
 
   Recipe(this.title, this.imageUrl, this.ingredientList, this.instructionList);
+
+  @override
+  List<String> getKeys() {
+    return _keyList;
+  }
+
+  @override
+  Map<String, dynamic> jsonSerialize() {
+    return {
+      kTitle: this.title,
+      kImageUrl: this.imageUrl,
+      kIngredientList: this.ingredientList,
+      kInstructionList: this.instructionList
+    };
+  }
 
   static List<Recipe> getTestData() {
     return [
