@@ -1,7 +1,7 @@
 // Author: @tdimhcsleumas
 
-import 'package:flutter_tutorial/model/ingredient.dart';
-import 'package:flutter_tutorial/model/instruction.dart';
+import 'package:swiftcook/model/ingredient.dart';
+import 'package:swiftcook/model/instruction.dart';
 
 class Recipe {
   static final String kTitle = "title";

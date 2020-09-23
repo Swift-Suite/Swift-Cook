@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tutorial/model/recipe.dart';
+import 'package:swiftcook/model/recipe.dart';
 
 class RecipeDetails extends StatelessWidget {
   RecipeDetails({@required this.recipe});

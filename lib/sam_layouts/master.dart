@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_tutorial/pages/recipe_page/recipe_listing.dart';
-import 'package:flutter_tutorial/pages/recipe_page/recipe_detail.dart';
+import 'package:swiftcook/sam_layouts/recipe_listing.dart';
+import 'package:swiftcook/sam_layouts/recipe_detail.dart';
 
 class MasterDetailContainer extends StatefulWidget {
   @override
