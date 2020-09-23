@@ -18,23 +18,20 @@ class Recipe {
 
   static List<Recipe> getTestData() {
     return [
-      Recipe("Cock and ball torture", "img.png", [
-        Ingredient("Semen", 1.0, "ml"),
-        Ingredient("Semen", 1.0, "ml"),
-        Ingredient("Semen", 1.0, "ml"),
+      Recipe("clean and family friendly", "img.png", [
+        Ingredient("code", 1.0, "ml"),
+        Ingredient("code", 1.0, "ml"),
+        Ingredient("code", 1.0, "ml"),
       ], [
-        Instruction("Eat ass and skate fast")
+        Instruction("talsdfj")
       ]),
-      Recipe(
-          "big balls lkjlkjlkjlkjljk",
-          "img.png",
-          [Ingredient("Semen", 1.0, "ml")],
-          [Instruction("Eat ass and skate fast")]),
+      Recipe("lkjlkjlkjlkjljk", "img.png", [Ingredient("lkj", 1.0, "ml")],
+          [Instruction("adsfasdf")]),
       Recipe(
           "lol xddddddddddddddddd",
           "img.png",
-          [Ingredient("Semen", 1.0, "ml")],
-          [Instruction("Eat ass and skate fast")]),
+          [Ingredient("fffffffffffff", 1.0, "ml")],
+          [Instruction("ffffffffffffff")]),
     ];
   }
 }
