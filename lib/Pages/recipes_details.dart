@@ -7,6 +7,22 @@ class RecipeDetails extends StatelessWidget {
 
   final Recipe recipe;
 
+  Widget _buildHeader(BuildContext context) => Container(
+        child: Stack(alignment: AlignmentDirectional.center, children: [
+          Image(image: AssetImage(recipe.imageUrl), fit: BoxFit.fitWidth),
+          Container(
+            alignment: Alignment.bottomCenter,
+            child: Text(
+              recipe.title,
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+            ),
+          ),
+        ]),
+      );
+
   Widget _buildIngredientList() {
     return SerializableList(recipe.ingredientList);
   }
@@ -23,7 +39,11 @@ class RecipeDetails extends StatelessWidget {
           actions: [IconButton(icon: Icon(Icons.edit), onPressed: null)],
         ),
         body: Column(
-          children: [_buildIngredientList(), _buildInstructionList()],
+          children: [
+            _buildHeader(context),
+            //_buildIngredientList(),
+            //_buildInstructionList()
+          ],
         ));
   }
 }
