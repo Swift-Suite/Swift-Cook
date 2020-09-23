@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import '../model/recipe.dart';
+import '../components/serializable_list.dart';
 
 class RecipeDetails extends StatelessWidget {
   RecipeDetails({@required this.recipe});
@@ -8,33 +8,11 @@ class RecipeDetails extends StatelessWidget {
   final Recipe recipe;
 
   Widget _buildIngredientList() {
-    return Container(
-        child: ListView.separated(
-            itemCount: recipe.ingredientList.length + 1,
-            separatorBuilder: (BuildContext context, int index) => Divider(),
-            itemBuilder: (BuildContext context, int index) {
-              if (index == 0) {
-                // return a header
-                return Row(children: [
-                  Text("Quantity"),
-                  Text("Unit"),
-                  Text("Ingredient"),
-                ]);
-              }
-              index -= 1;
-
-              var data = recipe.ingredientList[index];
-              return Row(children: [
-                Text(data.title),
-                Text(data.quantity.toString()),
-                Text(data.unit)
-              ]);
-            }),
-        height: 400);
+    return SerializableList(recipe.ingredientList);
   }
 
   Widget _buildInstructionList() {
-    return Container(child: Text("hello"));
+    return SerializableList(recipe.instructionList);
   }
 
   @override
