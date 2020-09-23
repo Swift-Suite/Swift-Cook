@@ -9,6 +9,13 @@ class Recipe {
   static final String kIngredientList = "ingredientList";
   static final String kInstructionList = "instructionList";
 
+  static final List<String> keyList = [
+    kTitle,
+    kImageUrl,
+    kIngredientList,
+    kInstructionList
+  ];
+
   String title;
   String imageUrl;
   List<Ingredient> ingredientList;
@@ -19,6 +26,27 @@ class Recipe {
   static List<Recipe> getTestData() {
     return [
       Recipe("clean and family friendly", "img.png", [
+        Ingredient("code", 1.0, "ml"),
+        Ingredient("code", 1.0, "ml"),
+        Ingredient("code", 1.0, "ml"),
+        Ingredient("code", 1.0, "ml"),
+        Ingredient("code", 1.0, "ml"),
+        Ingredient("code", 1.0, "ml"),
+        Ingredient("code", 1.0, "ml"),
+        Ingredient("code", 1.0, "ml"),
+        Ingredient("code", 1.0, "ml"),
+        Ingredient("code", 1.0, "ml"),
+        Ingredient("code", 1.0, "ml"),
+        Ingredient("code", 1.0, "ml"),
+        Ingredient("code", 1.0, "ml"),
+        Ingredient("code", 1.0, "ml"),
+        Ingredient("code", 1.0, "ml"),
+        Ingredient("code", 1.0, "ml"),
+        Ingredient("code", 1.0, "ml"),
+        Ingredient("code", 1.0, "ml"),
+        Ingredient("code", 1.0, "ml"),
+        Ingredient("code", 1.0, "ml"),
+        Ingredient("code", 1.0, "ml"),
         Ingredient("code", 1.0, "ml"),
         Ingredient("code", 1.0, "ml"),
         Ingredient("code", 1.0, "ml"),

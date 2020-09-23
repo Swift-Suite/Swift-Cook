@@ -5,6 +5,8 @@ class Ingredient {
   static final String kQuantity = "quantity";
   static final String kUnit = "unit";
 
+  static final List<String> keyList = [kTitle, kQuantity, kUnit];
+
   String title;
   double quantity;
   String unit;
