@@ -88,7 +88,7 @@ class Recipe extends Serializable {
 
   static List<Recipe> getTestData() {
     return [
-      Recipe("clean and family friendly", "img.png", [
+      /* Recipe("clean and family friendly", "img.png", [
         Ingredient("code", 1.0, "ml"),
         Ingredient("code", 1.0, "ml"),
         Ingredient("code", 1.0, "ml"),
@@ -122,7 +122,7 @@ class Recipe extends Serializable {
           "lol xddddddddddddddddd",
           "img.png",
           [Ingredient("fffffffffffff", 1.0, "ml")],
-          [Instruction("ffffffffffffff")]),
+          [Instruction("ffffffffffffff")]),*/
     ];
   }
 }

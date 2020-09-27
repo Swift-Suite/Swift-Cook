@@ -1,5 +1,7 @@
 // Author: @tdimhcsleumas
+import 'package:sqflite/sqflite.dart';
 import './serializable.dart';
+import '../database_manager.dart';
 
 class Instruction extends Serializable {
   static const String SQL_INSERT = '''''';
@@ -24,7 +26,8 @@ class Instruction extends Serializable {
   }
 
   Future<int> dbInsert() async {
-    return 1;
+    Database db = await DatabaseManager.instance.database;
+    return db.rawInsert(SQL_INSERT, [this.recipeId, this.content]);
   }
 
   Future<bool> dbUpdate() async {
