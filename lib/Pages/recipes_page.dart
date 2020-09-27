@@ -4,6 +4,8 @@ import 'package:flutter/rendering.dart';
 import '../model/data_objects/recipe.dart';
 import './recipes_details.dart';
 import './recipes_page_widgets/recipe_card.dart';
+import 'package:swiftcook/model/data_objects/ingredient.dart';
+import 'package:swiftcook/model/data_objects/instruction.dart';
 
 class RecipesPage extends StatefulWidget {
   @override
@@ -47,25 +49,34 @@ class RecipesPageState extends State<RecipesPage> {
 }
 
 /** list view for all the recipes */
-class RecipeListing extends StatelessWidget {
-  const RecipeListing(
-      {@required this.recipeSelectedCallback, this.selectedRecipe});
+class RecipeListing extends StatefulWidget {
+  final recipeSelectedCallback;
+  final selectedRecipe;
 
+  RecipeListing(
+    {@required this.recipeSelectedCallback, this.selectedRecipe}
+  );
+  RecipeListingState createState() => RecipeListingState(this.recipeSelectedCallback, this.selectedRecipe);
+}
+
+class RecipeListingState extends State<RecipeListing>{
   final ValueChanged<Recipe> recipeSelectedCallback;
   final Recipe selectedRecipe;
+  RecipeListingState(this.recipeSelectedCallback, this.selectedRecipe);
+
+  List<Recipe> allRecipes = Recipe.getTestData();
 
   @override
   Widget build(BuildContext context) {
     //double containerHeight = Recipe.getTestData().length *10.0;
-    int recipeLength = Recipe.getTestData().length;
-    List<Recipe> recipe = Recipe.getTestData();
+    int recipeLength = allRecipes.length;
     return ListView.builder(
         padding: const EdgeInsets.all(8.0),
         itemCount: recipeLength + 1,
         itemBuilder: (BuildContext ctxt, int index) {
           if (index < recipeLength) {
             return RecipeCard(
-                recipe: recipe[index],
+                recipe: allRecipes[index],
                 recipeSelectedCallback: recipeSelectedCallback);
             // return ListTile(
             //     title: Text(recipe[index].title),
@@ -79,12 +90,22 @@ class RecipeListing extends StatelessWidget {
                 tooltip: 'Add More Recipes',
                 color: Colors.green,
                 onPressed: () {
-                  Reeee += 1;
-                  print('$Reeee');
+                  addNewRecipe();
                 },
               ),
             ]);
           }
         });
+  }
+
+  void addNewRecipe(){
+      Recipe placehold = Recipe("PLACEHOLDER TITLE", "img.png",
+      [Ingredient("code", 1.0, "ml"),
+       Ingredient("code", 1.0, "ml")],
+      [Instruction("talsdfj")]);
+
+      setState((){allRecipes.add(placehold);});
+
+      //database.add(placehold)
   }
 }
