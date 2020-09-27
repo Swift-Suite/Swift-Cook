@@ -100,9 +100,9 @@ class RecipeListingState extends State<RecipeListing>{
 
   void addNewRecipe(){
       Recipe placehold = Recipe("PLACEHOLDER TITLE", "img.png",
-      [Ingredient("code", 1.0, "ml"),
-       Ingredient("code", 1.0, "ml")],
-      [Instruction("talsdfj")]);
+      [Ingredient(0,"code", 1.0, "ml"),
+       Ingredient(0,"code", 1.0, "ml")],
+      [Instruction(0,"talsdfj")]);
 
       setState((){allRecipes.add(placehold);});
 
