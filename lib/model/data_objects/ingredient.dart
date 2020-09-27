@@ -2,7 +2,7 @@
 import './serializable.dart';
 
 class Ingredient extends Serializable {
-  // define const string
+  // const strings to be used by the sql calls
   static const String SQL_INSERT = '''
   INSERT INTO Ingredient (RecipeId, Title, Quantity, Unit)
   VALUES (?,?,?,?);
@@ -10,7 +10,7 @@ class Ingredient extends Serializable {
 
   static const String SQL_SELECT = '''
   SELECT
-    RecipeId, Title, Quantity, Unit
+    rowid, RecipeId, Title, Quantity, Unit
   FROM
     Ingredient
   ''';
@@ -30,7 +30,7 @@ class Ingredient extends Serializable {
 
   static const String SQL_WHERE_RECIPE_ID = '''WHERE RecipeId = ?''';
 
-  static final String kId = "id";
+  static final String kId = "rowid";
   static final String kRecipeId = "recipeId";
   static final String kTitle = "title";
   static final String kQuantity = "quantity";
@@ -44,18 +44,20 @@ class Ingredient extends Serializable {
     kUnit
   ];
 
+  int id;
+  int recipeId;
   String title;
   double quantity;
   String unit;
 
-  Ingredient(this.title, this.quantity, this.unit);
+  Ingredient(this.recipeId, this.title, this.quantity, this.unit);
 
   // TODO: this later
   static Future<List<Ingredient>> retrieveByRecipeId(int recipeId) async {
     return [];
   }
 
-  Future<int> dbInsert() async{
+  Future<int> dbInsert() async {
     return 1;
   }
 
@@ -63,7 +65,7 @@ class Ingredient extends Serializable {
     return true;
   }
 
-  Future<bool> dbDelete() async{
+  Future<bool> dbDelete() async {
     return true;
   }
 

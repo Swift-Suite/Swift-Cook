@@ -4,7 +4,24 @@ import 'dart:async';
 import 'package:path/path.dart';
 
 class DatabaseManager {
+  // sqlite is funky and assigns rowid's when we do not specify an integer
+  // autoincrement field for the primary key. this auto generated field is called
+  // the rowid.
   static const String SQL_SCHEMA = '''
+  CREATE TABLE Recipe(
+    Title TEXT,
+    ImageUrl TEXT
+  );
+  CREATE TABLE Ingredient(
+    RecipeId INTEGER REFERENCES Recipe(rowid) ON DELETE CASCADE,
+    Title TEXT,
+    Quantity REAL, 
+    Unit TEXT
+  );
+  CREATE TABLE Instruction(
+    RecipeId INTEGER REFERENCES Recipe(rowid) ON DELETE CASCADE,
+    Content TEXT
+  );
   ''';
 
   static final DatabaseManager _instance = new DatabaseManager._internal();
