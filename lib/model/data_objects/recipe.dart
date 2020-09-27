@@ -1,8 +1,8 @@
 // Author: @tdimhcsleumas
 
-import 'package:swiftcook/model/ingredient.dart';
-import 'package:swiftcook/model/instruction.dart';
-import 'package:swiftcook/model/serializable.dart';
+import 'package:swiftcook/model/data_objects/ingredient.dart';
+import 'package:swiftcook/model/data_objects/instruction.dart';
+import 'package:swiftcook/model/data_objects/serializable.dart';
 
 class Recipe extends Serializable {
   static final String kTitle = "title";

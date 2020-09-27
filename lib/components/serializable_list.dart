@@ -1,7 +1,7 @@
 // Author: @tdimhcsleumas
 
 import 'package:flutter/material.dart';
-import '../model/serializable.dart';
+import '../model/data_objects/serializable.dart';
 
 class SerializableList extends StatelessWidget {
   SerializableList(this.serializables);

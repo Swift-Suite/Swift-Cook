@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:swiftcook/model/recipe.dart';
+import 'package:swiftcook/model/data_objects/recipe.dart';
 
 enum menuItems { one, two, three }
 
@@ -18,7 +18,6 @@ class RecipeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-
     return Padding(
         padding: const EdgeInsets.symmetric(vertical: 10.0),
         child: Container(
