@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
-import '../model/recipe.dart';
+import '../model/data_objects/recipe.dart';
 import './recipes_details.dart';
 import './recipes_page_widgets/recipe_card.dart';
+
 class RecipesPage extends StatefulWidget {
   @override
   RecipesPageState createState() => RecipesPageState();
@@ -63,7 +64,9 @@ class RecipeListing extends StatelessWidget {
         itemCount: recipeLength + 1,
         itemBuilder: (BuildContext ctxt, int index) {
           if (index < recipeLength) {
-            return RecipeCard(recipe: recipe[index], recipeSelectedCallback: recipeSelectedCallback);
+            return RecipeCard(
+                recipe: recipe[index],
+                recipeSelectedCallback: recipeSelectedCallback);
             // return ListTile(
             //     title: Text(recipe[index].title),
             //     onTap: () => recipeSelectedCallback(recipe[index]),

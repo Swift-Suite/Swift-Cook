@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../model/recipe.dart';
+import '../model/data_objects/recipe.dart';
 import '../components/serializable_list.dart';
 
 class RecipeDetails extends StatelessWidget {
