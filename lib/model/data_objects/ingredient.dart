@@ -55,15 +55,15 @@ class Ingredient extends Serializable {
     return [];
   }
 
-  Future<int> dbInsert() {
+  Future<int> dbInsert() async{
     return 1;
   }
 
-  Future<bool> dbUpdate() {
-    return Future<true>;
+  Future<bool> dbUpdate() async {
+    return true;
   }
 
-  Future<bool> dbDelete() {
+  Future<bool> dbDelete() async{
     return true;
   }
 
