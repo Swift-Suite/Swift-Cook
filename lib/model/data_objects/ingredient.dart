@@ -1,8 +1,12 @@
 // Author: @tdimhcsleumas
 import './serializable.dart';
+import '../database_manager.dart';
+import 'package:sqflite/sqflite.dart';
+import '../../swift_exception.dart';
 
 class Ingredient extends Serializable {
-  // define const string
+  static const String TAG = "Ingredient";
+  // const strings to be used by the sql calls
   static const String SQL_INSERT = '''
   INSERT INTO Ingredient (RecipeId, Title, Quantity, Unit)
   VALUES (?,?,?,?);
@@ -10,7 +14,7 @@ class Ingredient extends Serializable {
 
   static const String SQL_SELECT = '''
   SELECT
-    RecipeId, Title, Quantity, Unit
+    rowid, RecipeId, Title, Quantity, Unit
   FROM
     Ingredient
   ''';
@@ -30,7 +34,7 @@ class Ingredient extends Serializable {
 
   static const String SQL_WHERE_RECIPE_ID = '''WHERE RecipeId = ?''';
 
-  static final String kId = "id";
+  static final String kId = "rowid";
   static final String kRecipeId = "recipeId";
   static final String kTitle = "title";
   static final String kQuantity = "quantity";
@@ -44,26 +48,53 @@ class Ingredient extends Serializable {
     kUnit
   ];
 
+  int id;
+  int recipeId;
   String title;
   double quantity;
   String unit;
 
-  Ingredient(this.title, this.quantity, this.unit);
+  Ingredient(this.recipeId, this.title, this.quantity, this.unit);
 
   // TODO: this later
   static Future<List<Ingredient>> retrieveByRecipeId(int recipeId) async {
     return [];
   }
 
-  Future<int> dbInsert() async{
-    return 1;
+  // TODO: clean this up mr schmidt
+  static Future<List<Map<String, dynamic>>> retrieveAll() async {
+    Database db = await DatabaseManager.instance.database;
+    return db.rawQuery(SQL_SELECT);
+  }
+
+  Future<int> dbInsert() async {
+    Database db = await DatabaseManager.instance.database;
+    return db.rawInsert(
+        SQL_INSERT, [this.recipeId, this.title, this.quantity, this.unit]);
   }
 
   Future<bool> dbUpdate() async {
+    Database db = await DatabaseManager.instance.database;
+    int count = await db
+        .rawUpdate(SQL_UPDATE, [this.title, this.quantity, this.unit, this.id]);
+
+    if (count != 1) {
+      throw new DatabaseWriteException(
+          TAG, "More than one row was updated on a dbUpdate");
+    }
+
     return true;
   }
 
-  Future<bool> dbDelete() async{
+  Future<bool> dbDelete() async {
+    Database db = await DatabaseManager.instance.database;
+    int count = await db.rawDelete(SQL_DELETE, [this.id]);
+
+    if (count != 1) {
+      throw new DatabaseWriteException(
+          TAG, "More than one row was updated on a dbDelete");
+    }
+
     return true;
   }
 
