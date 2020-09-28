@@ -9,13 +9,14 @@ class Recipe extends Serializable {
   INSERT INTO Recipe (Title, ImageUrl) 
   Values (?, ?);
   ''';
+  //Select might need where statement
   static const String SQL_SELECT = '''
   SELECT
     rowid, Title, ImageUrl
   FROM 
     Recipe
   ''';
-
+  //SQL_Update might need where statement
   static const String SQL_UPDATE = '''
   UPDATE Recipe
   SET Title = ?,

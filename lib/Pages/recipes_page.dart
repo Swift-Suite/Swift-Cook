@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import '../model/data_objects/recipe.dart';
 import './recipes_details.dart';
-import './recipes_page_widgets/recipe_card.dart';
+import '../components/recipe_card.dart';
 import 'package:swiftcook/model/data_objects/ingredient.dart';
 import 'package:swiftcook/model/data_objects/instruction.dart';
 
@@ -101,8 +101,24 @@ class RecipeListingState extends State<RecipeListing>{
   void addNewRecipe(){
       Recipe placehold = Recipe("PLACEHOLDER TITLE", "img.png",
       [Ingredient(0,"code", 1.0, "ml"),
+        Ingredient(0,"code", 1.0, "ml"),
+        Ingredient(0,"code", 1.0, "ml"),
+        Ingredient(0,"code", 1.0, "ml"),
+        Ingredient(0,"code", 1.0, "ml"),
+        Ingredient(0,"code", 1.0, "ml"),
+        Ingredient(0,"code", 1.0, "ml"),
+        Ingredient(0,"code", 1.0, "ml"),
+        Ingredient(0,"code", 1.0, "ml"),
+        Ingredient(0,"code", 1.0, "ml"),
+        Ingredient(0,"code", 1.0, "ml"),
+        Ingredient(0,"code", 1.0, "ml"),
+        Ingredient(0,"code", 1.0, "ml"),
+        Ingredient(0,"code", 1.0, "ml"),
+        Ingredient(0,"code", 1.0, "ml"),
+        Ingredient(0,"code", 1.0, "ml"),
+
        Ingredient(0,"code", 1.0, "ml")],
-      [Instruction(0,"talsdfj")]);
+      [Instruction(0,"talsdfjda;kjfl;skdjf;lkjdsflkjasdkl;fjklsdajfkjdsalkfjadsklfjkdsajfkl;jdsaklfjaklds;fjkadsjfkdsjf;kljsd;klfjdskfjkdsajfkljsa;")]);
 
       setState((){allRecipes.add(placehold);});
 
