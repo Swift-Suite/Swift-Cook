@@ -1,5 +1,5 @@
 class Converter {
-/**
+  /**
  * This class converts from one unit to another.
  * 
  * You can use [String variable names] to quickly refer to a unit type without
@@ -71,17 +71,15 @@ class Converter {
 
   double convert(double quantity, String fromUnit, String toUnit) {
     /**
-   * Returns the result of converting `fromUnit` to `toUnit`.
+   * Returns converted `toUnit`
+   * 
+   *      Example:
+   * 
+   *      Converter converter = Converter();
+   *      double amount = converter.convert(converter.usTsp, converter.ukGallon);
+   *       OR
+   *      double amount = converter.convert('US_teaspoon', 'UK_barrel');
    */
     return quantity * unitsToML[fromUnit] / unitsToML[toUnit];
   }
-}
-
-// Use Case Example
-void main() {
-  Converter con = Converter(); // Initialize Converter
-
-  // US Cup -> US Tsp
-  double cup = con.convert(100, con.usCup, con.usTsp);
-  print(cup);
 }
