@@ -13,33 +13,43 @@ class SerializableList extends StatelessWidget {
     //main column
     List<Widget> cBuilder = List<Widget>();
 
+    Size size = MediaQuery.of(context).size;
+
     //constructs the
     bool divider = false;
-    for (int i = 0; i<serializables.length;i++) {
+    for (int i = 0; i < serializables.length; i++) {
       var data = serializables[i].jsonSerialize();
       //builds the item to be added to the item builder.
-      List<Widget> content = List<Widget>();
-      content.add(Icon(Icons.arrow_right));
-      content.add(VerticalDivider());
+      List<Widget> row = List<Widget>();
+      row.add(
+          Container(width: size.width / 10, child: Icon(Icons.arrow_right)));
 
-      content.addAll(data.values.map((value) {
-        return Expanded(child: Text(value.toString()));
-      }).toList());
+      List<dynamic> dataList = data.values.toList();
+      for (int i = 0; i < dataList.length; i++) {
+        if (i == 0) {
+          row.add(Expanded(child: Text(dataList[i].toString())));
+        } else {
+          row.add(Container(
+              width: size.width / 8, child: Text(dataList[i].toString())));
+        }
+      }
 
       //adds the row to the column builder
-      cBuilder.add(Row(children: content));
+      cBuilder.add(Row(children: row));
       divider = !divider;
-      if(divider &&  i != serializables.length-1){
+      if (divider && i != serializables.length - 1) {
         cBuilder.add(Divider());
         divider = !divider;
       }
     }
 
-    Size size = MediaQuery.of(context).size;
-    print(serializables.length);
+    //print(serializables.length);
     return Container(
-        child: Column(
-          children: cBuilder,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Column(
+            children: cBuilder,
+          ),
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0),
