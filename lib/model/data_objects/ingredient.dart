@@ -38,10 +38,10 @@ class Ingredient extends Serializable {
   static const String SQL_WHERE_ROWID = '''WHERE rowid = ?''';
 
   static final String kId = "rowid";
-  static final String kRecipeId = "recipeId";
-  static final String kTitle = "title";
-  static final String kQuantity = "quantity";
-  static final String kUnit = "unit";
+  static final String kRecipeId = "RecipeId";
+  static final String kTitle = "Title";
+  static final String kQuantity = "Quantity";
+  static final String kUnit = "Unit";
 
   static final List<String> _keyList = [
     kId,
@@ -120,6 +120,10 @@ class Ingredient extends Serializable {
   static Ingredient createFromJson(Map<String, dynamic> json) {
     Ingredient ingredient = new Ingredient._();
 
+    print("================= create from json ====================");
+    print(json);
+    print("=====================================");
+
     ingredient.id = json[Ingredient.kId] ?? null;
     ingredient.recipeId = json[Ingredient.kRecipeId] ?? null;
     ingredient.title = json[Ingredient.kTitle] ?? null;
@@ -136,6 +140,12 @@ class Ingredient extends Serializable {
 
   @override
   Map<String, dynamic> jsonSerialize() {
-    return {kTitle: this.title, kQuantity: this.quantity, kUnit: this.unit};
+    return {
+      kId: this.id,
+      kRecipeId: this.recipeId,
+      kTitle: this.title,
+      kQuantity: this.quantity,
+      kUnit: this.unit
+    };
   }
 }
