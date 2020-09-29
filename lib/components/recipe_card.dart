@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:swiftcook/model/data_objects/recipe.dart';
 
-enum menuItems { one, two, three }
-
 class RecipeCard extends StatelessWidget {
   final Recipe recipe;
   final ValueChanged<Recipe> recipeSelectedCallback;
+  final Function recipeTitleEditCallback;
   //final Widget thumbnail;
   //constructor
   RecipeCard({
@@ -13,6 +12,7 @@ class RecipeCard extends StatelessWidget {
     //this.thumbnail,
     this.recipe,
     this.recipeSelectedCallback,
+    this.recipeTitleEditCallback
   }) : super(key: key);
 
   @override
@@ -58,18 +58,25 @@ class RecipeCard extends StatelessWidget {
                   VerticalDivider(),
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: PopupMenuButton<menuItems>(
+                    child: PopupMenuButton<String>(
                         icon: Icon(Icons.more_vert),
-                        onSelected: null,
-                        itemBuilder: (BuildContext context) =>
-                            <PopupMenuEntry<menuItems>>[
-                              const PopupMenuItem(
-                                  value: menuItems.one, child: Text("one")),
-                              const PopupMenuItem(
-                                  value: menuItems.two, child: Text("two")),
-                              const PopupMenuItem(
-                                  value: menuItems.three, child: Text("three")),
-                            ]),
+                        onSelected: (String result){
+                          if(result == "Rename"){
+                            this.recipeTitleEditCallback(1); //callback to recipePages to modify the title
+                            
+                          }
+                          else if(result == "Change Image"){
+
+                          }
+                        },
+                        itemBuilder: (BuildContext context){
+                          return {'Change Image','Rename','Edit Recipe', 'Delete'}.map((String choice){
+                            return PopupMenuItem<String>(
+                              value: choice,
+                              child: Text(choice),
+                            );
+                          }).toList();
+                           }),
                   ),
                 ])));
   }

@@ -13,27 +13,20 @@ class RecipesPage extends StatefulWidget {
 }
 
 class RecipesPageState extends State<RecipesPage> {
-  bool canEdit = false;
-
-  void toggleEdit() {
-    setState(() {
-      canEdit = !canEdit;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Text("Master"),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.edit),
-              onPressed: () => setState(() {
-                canEdit = !canEdit;
-              }),
-            ),
-          ],
+          // actions: [
+          //   IconButton(
+          //     icon: Icon(Icons.edit),
+          //     onPressed: () => setState(() {
+          //       canEdit = !canEdit;
+          //     }),
+          //   ),
+          // ],
         ),
         body: RecipeListing(recipeSelectedCallback: (recipe) {
           Navigator.push(
@@ -52,9 +45,10 @@ class RecipesPageState extends State<RecipesPage> {
 class RecipeListing extends StatefulWidget {
   final recipeSelectedCallback;
   final selectedRecipe;
+  bool editable;
 
   RecipeListing(
-    {@required this.recipeSelectedCallback, this.selectedRecipe}
+    {@required this.recipeSelectedCallback, this.selectedRecipe, }
   );
   RecipeListingState createState() => RecipeListingState(this.recipeSelectedCallback, this.selectedRecipe);
 }
@@ -66,6 +60,8 @@ class RecipeListingState extends State<RecipeListing>{
 
   List<Recipe> allRecipes = Recipe.getTestData();
 
+  
+  
   @override
   Widget build(BuildContext context) {
     //double containerHeight = Recipe.getTestData().length *10.0;
@@ -77,13 +73,15 @@ class RecipeListingState extends State<RecipeListing>{
           if (index < recipeLength) {
             return RecipeCard(
                 recipe: allRecipes[index],
-                recipeSelectedCallback: recipeSelectedCallback);
+                recipeSelectedCallback: recipeSelectedCallback,
+                recipeTitleEditCallback: editRecipeTitle
+                
+                );
             // return ListTile(
             //     title: Text(recipe[index].title),
             //     onTap: () => recipeSelectedCallback(recipe[index]),
             //     selected: selectedRecipe == recipe[index]);
           } else {
-            int Reeee = 0;
             return Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
               IconButton(
                 icon: Icon(Icons.add, size: 18),
@@ -123,5 +121,74 @@ class RecipeListingState extends State<RecipeListing>{
       setState((){allRecipes.add(placehold);});
 
       //database.add(placehold)
+  }
+  
+  Future<void> editRecipeTitle(int recipeID) async{
+    String newTitle = await getUserText();
+    int recipeIndex;
+    for(int i = 0; i < allRecipes.length; i++){
+      if(allRecipes[i].id == recipeID)
+        recipeIndex = i;
+    }
+    //database.modify(recipeID, Title, newTitle) // dont know how this call looks
+    setState((){
+      allRecipes[recipeIndex].name = newTitle;
+    });
+  }
+
+
+
+  Future<String> getUserText() async{
+    String toRet;
+    var txt = TextEditingController();
+    // showDialog(
+    //     context: context,
+    //     builder: (BuildContext context) {
+    //       return AlertDialog(
+    //         content: Stack(
+    //           overflow: Overflow.visible,
+    //           children: <Widget>[
+    //             Positioned(
+    //               right: -40.0,
+    //               top: -40.0,
+    //               child: InkResponse(
+    //                 onTap: () {
+    //                   Navigator.of(context).pop();
+    //                 },
+    //                 child: CircleAvatar(
+    //                   child: Icon(Icons.close),
+    //                   backgroundColor: Colors.red,
+    //                 ),
+    //               ),
+    //             ),
+    //             Form(
+    //               //key: _formKey,
+    //               child: Column(
+    //                 mainAxisSize: MainAxisSize.min,
+    //                 children: <Widget>[
+    //                   Padding(
+    //                     padding: EdgeInsets.all(8.0),
+    //                     child: TextFormField(
+    //                       controller: txt;
+    //                       //textInputAction: TextInputAction.go
+    //                       ),
+    //                   ),
+    //                   // Padding(
+    //                   //   padding: const EdgeInsets.all(8.0),
+    //                   //   child: RaisedButton(
+    //                   //     child: Text("Submit"),
+    //                   //     onPressed: () {
+    //                   //       //Actual Button Press.
+    //                   //     },
+    //                   //   ),
+    //                   // )
+    //                 ],
+    //               ),
+    //             ),
+    //           ],
+    //         ),
+    //       );
+    //     });
+      return toRet;
   }
 }

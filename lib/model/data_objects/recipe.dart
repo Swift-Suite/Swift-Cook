@@ -126,4 +126,29 @@ class Recipe extends Serializable {
           [Instruction("ffffffffffffff")]),*/
     ];
   }
+  set name(String newTitle){
+    title = newTitle;
+  }
+  set image(String newImageURL){
+    imageUrl = newImageURL;
+  }
+  set ingredientsAll(List<Ingredient> newList){
+    ingredientList = newList;
+  }
+  set instructionsAll(List<Instruction> newList){
+    instructionList = newList;
+  }
+  void addIngredient(Ingredient newIngredient){
+    ingredientList.add(newIngredient);
+  }
+  void changeIngredient(Ingredient newIngredient, int index){
+    ingredientList[index] = newIngredient;
+  }
+  void addInstruction(Instruction newInstruction){
+    instructionList.add(newInstruction);
+  }
+  void changeInstruction(Instruction newInstruction, int index){
+    instructionList[index] = newInstruction;
+  }
+
 }
