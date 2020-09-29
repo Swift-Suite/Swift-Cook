@@ -9,7 +9,7 @@ import '../lib/model/database_manager.dart';
 
 void main() async {
   test('ingredients should work lol', ingredientTest);
-  //test('instruction should work lol', instructionTest);
+  test('instruction should work lol', instructionTest);
 }
 
 Future<void> ingredientTest() async {

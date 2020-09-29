@@ -87,6 +87,9 @@ class Recipe extends Serializable {
     };
   }
 
+  @override
+  void initializeFromJson(Map<String, dynamic> json) {}
+
   static List<Recipe> getTestData() {
     return [
       /* Recipe("clean and family friendly", "img.png", [
@@ -126,42 +129,52 @@ class Recipe extends Serializable {
           [Instruction("ffffffffffffff")]),*/
     ];
   }
-  set name(String newTitle){
+
+  set name(String newTitle) {
     title = newTitle;
   }
-  set image(String newImageURL){
+
+  set image(String newImageURL) {
     imageUrl = newImageURL;
   }
-  set ingredientsAll(List<Ingredient> newList){
+
+  set ingredientsAll(List<Ingredient> newList) {
     ingredientList = newList;
   }
-  set instructionsAll(List<Instruction> newList){
+
+  set instructionsAll(List<Instruction> newList) {
     instructionList = newList;
   }
-  void addIngredient(Ingredient newIngredient){
+
+  void addIngredient(Ingredient newIngredient) {
     ingredientList.add(newIngredient);
   }
-  void changeIngredient(Ingredient newIngredient, int index){
+
+  void changeIngredient(Ingredient newIngredient, int index) {
     ingredientList[index] = newIngredient;
   }
-  void addIngredientAt(Ingredient newIngredient, int index){
+
+  void addIngredientAt(Ingredient newIngredient, int index) {
     ingredientList.insert(index, newIngredient);
   }
-  void deleteIngredientAt(int index){
+
+  void deleteIngredientAt(int index) {
     ingredientList.removeAt(index);
   }
 
-  void addInstruction(Instruction newInstruction){
+  void addInstruction(Instruction newInstruction) {
     instructionList.add(newInstruction);
   }
-  void addInstructionAt(Instruction newInstruction, int index){
-    instructionList.insert(index,newInstruction);
-  }
-  void changeInstruction(Instruction newInstruction, int index){
-    instructionList[index] = newInstruction;
-  }
-  void deleteInstructionAt(int index){
-    instructionList.removeAt(index);
+
+  void addInstructionAt(Instruction newInstruction, int index) {
+    instructionList.insert(index, newInstruction);
   }
 
+  void changeInstruction(Instruction newInstruction, int index) {
+    instructionList[index] = newInstruction;
+  }
+
+  void deleteInstructionAt(int index) {
+    instructionList.removeAt(index);
+  }
 }
