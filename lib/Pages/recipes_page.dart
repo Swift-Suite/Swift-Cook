@@ -14,7 +14,6 @@ class RecipesPage extends StatefulWidget {
 }
 
 class RecipesPageState extends State<RecipesPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,21 +47,21 @@ class RecipeListing extends StatefulWidget {
   final selectedRecipe;
   bool editable;
 
-  RecipeListing(
-    {@required this.recipeSelectedCallback, this.selectedRecipe, }
-  );
-  RecipeListingState createState() => RecipeListingState(this.recipeSelectedCallback, this.selectedRecipe);
+  RecipeListing({
+    @required this.recipeSelectedCallback,
+    this.selectedRecipe,
+  });
+  RecipeListingState createState() =>
+      RecipeListingState(this.recipeSelectedCallback, this.selectedRecipe);
 }
 
-class RecipeListingState extends State<RecipeListing>{
+class RecipeListingState extends State<RecipeListing> {
   final ValueChanged<Recipe> recipeSelectedCallback;
   final Recipe selectedRecipe;
   RecipeListingState(this.recipeSelectedCallback, this.selectedRecipe);
 
   List<Recipe> allRecipes = Recipe.getTestData();
 
-  
-  
   @override
   Widget build(BuildContext context) {
     //double containerHeight = Recipe.getTestData().length *10.0;
@@ -73,12 +72,11 @@ class RecipeListingState extends State<RecipeListing>{
         itemBuilder: (BuildContext ctxt, int index) {
           if (index < recipeLength) {
             return RecipeCard(
-                recipe: allRecipes[index],
-                recipeSelectedCallback: recipeSelectedCallback,
-                recipeTitleEditCallback: editRecipeTitle,
-                recipeDeleteCallback: deleteRecipe,
-                
-                );
+              recipe: allRecipes[index],
+              recipeSelectedCallback: recipeSelectedCallback,
+              recipeTitleEditCallback: editRecipeTitle,
+              recipeDeleteCallback: deleteRecipe,
+            );
             // return ListTile(
             //     title: Text(recipe[index].title),
             //     onTap: () => recipeSelectedCallback(recipe[index]),
@@ -98,103 +96,102 @@ class RecipeListingState extends State<RecipeListing>{
         });
   }
 
-  void addNewRecipe(){
-      Recipe placehold = Recipe("PLACEHOLDER TITLE", "img.png",
-      [Ingredient(0,"code", 1.0, "ml"),
-        Ingredient(0,"code", 1.0, "ml"),
-        Ingredient(0,"code", 1.0, "ml"),
-        Ingredient(0,"code", 1.0, "ml"),
-        Ingredient(0,"code", 1.0, "ml"),
-        Ingredient(0,"code", 1.0, "ml"),
-        Ingredient(0,"code", 1.0, "ml"),
-        Ingredient(0,"code", 1.0, "ml"),
-        Ingredient(0,"code", 1.0, "ml"),
-        Ingredient(0,"code", 1.0, "ml"),
-        Ingredient(0,"code", 1.0, "ml"),
-        Ingredient(0,"code", 1.0, "ml"),
-        Ingredient(0,"code", 1.0, "ml"),
-        Ingredient(0,"code", 1.0, "ml"),
-        Ingredient(0,"code", 1.0, "ml"),
-        Ingredient(0,"code", 1.0, "ml"),
+  void addNewRecipe() {
+    Recipe placehold = Recipe("PLACEHOLDER TITLE", "img.png", [
+      Ingredient(0, "code", 1.0, "ml"),
+      Ingredient(0, "code", 1.0, "ml"),
+      Ingredient(0, "code", 1.0, "ml"),
+      Ingredient(0, "code", 1.0, "ml"),
+      Ingredient(0, "code", 1.0, "ml"),
+      Ingredient(0, "code", 1.0, "ml"),
+      Ingredient(0, "code", 1.0, "ml"),
+      Ingredient(0, "code", 1.0, "ml"),
+      Ingredient(0, "code", 1.0, "ml"),
+      Ingredient(0, "code", 1.0, "ml"),
+      Ingredient(0, "code", 1.0, "ml"),
+      Ingredient(0, "code", 1.0, "ml"),
+      Ingredient(0, "code", 1.0, "ml"),
+      Ingredient(0, "code", 1.0, "ml"),
+      Ingredient(0, "code", 1.0, "ml"),
+      Ingredient(0, "code", 1.0, "ml"),
+      Ingredient(0, "code", 1.0, "ml")
+    ], [
+      Instruction(0,
+          "talsdfjda;kjfl;skdjf;lkjdsflkjasdkl;fjklsdajfkjdsalkfjadsklfjkdsajfkl;jdsaklfjaklds;fjkadsjfkdsjf;kljsd;klfjdskfjkdsajfkljsa;")
+    ]);
 
-       Ingredient(0,"code", 1.0, "ml")],
-      [Instruction(0,"talsdfjda;kjfl;skdjf;lkjdsflkjasdkl;fjklsdajfkjdsalkfjadsklfjkdsajfkl;jdsaklfjaklds;fjkadsjfkdsjf;kljsd;klfjdskfjkdsajfkljsa;")]);
+    setState(() {
+      allRecipes.add(placehold);
+    });
 
-      setState((){allRecipes.add(placehold);});
-
-      //database.add(placehold)
+    //database.add(placehold)
   }
 
-  void deleteRecipe(int recipeID) async{
+  void deleteRecipe(int recipeID) async {
     int recipeIndex = 0;
     bool delete = false;
-    await confirmationAlert(context).then((value){
-      if(value != null)
-        delete = value;
+    await confirmationAlert(context).then((value) {
+      if (value != null) delete = value;
     });
-    if(!delete){
+    if (!delete) {
       return;
     }
 
-    for(int i = 0 ;i <allRecipes.length; i++){
-      if(allRecipes[i].id == recipeID){
-        recipeIndex = i ;
+    for (int i = 0; i < allRecipes.length; i++) {
+      if (allRecipes[i].id == recipeID) {
+        recipeIndex = i;
         break;
       }
     }
 
-    setState((){
+    setState(() {
       allRecipes.removeAt(recipeIndex);
     });
     //database.delete(recipeIndex)
+    /*delete {
+      var toBeDeleted = list[index].dbDelete;
+      toBeDeleted.dbDelete();
+    }*/
   }
-  
-  void editRecipeTitle(String recipeTitle,int recipeID) async{
+
+  void editRecipeTitle(String recipeTitle, int recipeID) async {
     print('-----RecipeTitle: $recipeTitle ------');
     String newTitle = recipeTitle;
 
-    await getUserText(recipeTitle).then((onValue){
+    await getUserText(recipeTitle).then((onValue) {
       print("------------------------------First------------------------");
-      if(onValue != null)
-        newTitle = onValue;
+      if (onValue != null) newTitle = onValue;
       print("------------------------------Second------------------------");
-
     });
     int recipeIndex;
-    for(int i = 0; i < allRecipes.length; i++){
-      if(allRecipes[i].id == recipeID)
-        recipeIndex = i;
+    for (int i = 0; i < allRecipes.length; i++) {
+      if (allRecipes[i].id == recipeID) recipeIndex = i;
     }
     //database.modify(recipeID, Title, newTitle) // dont know how this call looks
-    setState((){
+    setState(() {
       allRecipes[recipeIndex].name = newTitle;
     });
   }
 
-
-
-  Future<String> getUserText(String recipeName){
+  Future<String> getUserText(String recipeName) {
     TextEditingController txt = TextEditingController(text: recipeName);
     return showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Recipe Name"),
-
-            content: TextFormField(
-              controller: txt,
-            ),
-            actions :<Widget> [
-              MaterialButton(
-                elevation:5.0,
-                child:Text('Save'),
-                onPressed:(){
-                  Navigator.of(context).pop(txt.text.toString());
-                },
-              )
-            ]
-
-          );
+              title: Text("Recipe Name"),
+              content: TextFormField(
+                controller: txt,
+              ),
+              actions: <Widget>[
+                MaterialButton(
+                  elevation: 5.0,
+                  child: Text('Save'),
+                  onPressed: () {
+                    Navigator.of(context).pop(txt.text.toString());
+                  },
+                )
+              ]);
         });
   }
 }

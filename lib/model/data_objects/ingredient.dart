@@ -7,8 +7,7 @@ import 'package:sqflite/sqflite.dart';
 import '../../swift_exception.dart';
 
 class Ingredient extends Serializable {
-  static const String TAG = "Ingredient";
-  // const strings to be used by the sql calls
+  // sql strings ===============================================================
   static const String SQL_INSERT = '''
   INSERT INTO Ingredient (RecipeId, Title, Quantity, Unit)
   VALUES (?,?,?,?)
@@ -37,11 +36,13 @@ class Ingredient extends Serializable {
   static const String SQL_WHERE_RECIPE_ID = '''WHERE RecipeId = ?''';
   static const String SQL_WHERE_ROWID = '''WHERE rowid = ?''';
 
+  // class meta data ===========================================================
+  static const String TAG = "Ingredient";
   static final String kId = "rowid";
-  static final String kRecipeId = "recipeId";
-  static final String kTitle = "title";
-  static final String kQuantity = "quantity";
-  static final String kUnit = "unit";
+  static final String kRecipeId = "RecipeId";
+  static final String kTitle = "Title";
+  static final String kQuantity = "Quantity";
+  static final String kUnit = "Unit";
 
   static final List<String> _keyList = [
     kId,
@@ -57,9 +58,43 @@ class Ingredient extends Serializable {
   double quantity;
   String unit;
 
-  Ingredient._();
+  // class creation ============================================================
+  Ingredient._(); // private default ctor
   Ingredient(this.recipeId, this.title, this.quantity, this.unit);
 
+  @override
+  void initializeFromJson(Map<String, dynamic> json) {
+    this.id = json[Ingredient.kId] ?? null;
+    this.recipeId = json[Ingredient.kRecipeId] ?? null;
+    this.title = json[Ingredient.kTitle] ?? null;
+    this.quantity = json[Ingredient.kQuantity] ?? null;
+    this.unit = json[Ingredient.kUnit] ?? null;
+  }
+
+  static Ingredient createFromJson(Map<String, dynamic> json) {
+    Ingredient ingredient = new Ingredient._();
+    ingredient.initializeFromJson(json);
+
+    return ingredient;
+  }
+
+  @override
+  List<String> getKeys() {
+    return _keyList;
+  }
+
+  @override
+  Map<String, dynamic> jsonSerialize() {
+    return {
+      kId: this.id,
+      kRecipeId: this.recipeId,
+      kTitle: this.title,
+      kQuantity: this.quantity,
+      kUnit: this.unit
+    };
+  }
+
+  // retrieves =================================================================
   static Future<Ingredient> retrieveByRowid(int rowid) async {
     Database db = await DatabaseManager.instance.database;
 
@@ -85,6 +120,7 @@ class Ingredient extends Serializable {
     return result.map((row) => Ingredient.createFromJson(row)).toList();
   }
 
+  // create ====================================================================
   Future<int> dbInsert() async {
     Database db = await DatabaseManager.instance.database;
     this.id = await db.rawInsert(
@@ -92,6 +128,7 @@ class Ingredient extends Serializable {
     return this.id;
   }
 
+  // update ====================================================================
   Future<bool> dbUpdate() async {
     Database db = await DatabaseManager.instance.database;
     int count = await db
@@ -105,6 +142,7 @@ class Ingredient extends Serializable {
     return true;
   }
 
+  // delete ====================================================================
   Future<bool> dbDelete() async {
     Database db = await DatabaseManager.instance.database;
     int count = await db.rawDelete(SQL_DELETE, [this.id]);
@@ -115,27 +153,5 @@ class Ingredient extends Serializable {
     }
 
     return true;
-  }
-
-  static Ingredient createFromJson(Map<String, dynamic> json) {
-    Ingredient ingredient = new Ingredient._();
-
-    ingredient.id = json[Ingredient.kId] ?? null;
-    ingredient.recipeId = json[Ingredient.kRecipeId] ?? null;
-    ingredient.title = json[Ingredient.kTitle] ?? null;
-    ingredient.quantity = json[Ingredient.kQuantity] ?? null;
-    ingredient.unit = json[Ingredient.kUnit] ?? null;
-
-    return ingredient;
-  }
-
-  @override
-  List<String> getKeys() {
-    return _keyList;
-  }
-
-  @override
-  Map<String, dynamic> jsonSerialize() {
-    return {kTitle: this.title, kQuantity: this.quantity, kUnit: this.unit};
   }
 }

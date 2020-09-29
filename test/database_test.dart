@@ -9,7 +9,7 @@ import '../lib/model/database_manager.dart';
 
 void main() async {
   test('ingredients should work lol', ingredientTest);
-  //test('instruction should work lol', instructionTest);
+  test('instruction should work lol', instructionTest);
 }
 
 Future<void> ingredientTest() async {
@@ -50,6 +50,9 @@ Future<void> ingredientTest() async {
     print("====== testing dbDelete ======");
     bool deleteResult = await ingredient.dbDelete();
     if (!deleteResult) throw Exception("delete did not return true");
+
+    var afterDelete = await Ingredient.retrieveAll();
+    if (afterDelete.length != 0) throw Exception("delete failed");
   } catch (e) {
     if (e is BaseException) {
       print(e.cause);
