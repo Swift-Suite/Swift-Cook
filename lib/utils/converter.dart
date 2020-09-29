@@ -13,30 +13,12 @@ class Converter {
  *     Output: "US_teaspoon"
  */
 
-  Map<String, double> _unitsToML = Map<String, double>();
-  String usTsp = 'US_teaspoon';
-  String ukTsp = 'UK_teaspoon';
-  String metricTsp = 'Metric_teaspoon';
-  String usTbsp = 'US_tablespoon';
-  String ukTbsp = 'UK_tablespoon';
-  String metricTbsp = 'Metric_tablespoon';
-  String usCup = 'US_cup';
-  String ukCup = 'UK_cup';
-  String metricCup = 'Metric_cup';
-  String usPint = 'US_pint';
-  String ukPint = 'UK_pint';
-  String usQuart = 'US_quart';
-  String ukQuart = 'UK_quart';
-  String usGallon = 'US_gallon';
-  String ukGallon = 'UK_gallon';
-  String usBarrel = 'US_barrel';
-  String ukBarrel = 'UK_barrel';
-  String usFlOunce = 'US_fl_ounce';
-  String ukFlOunce = 'UK_fl_ounce';
-  String mL = 'mL';
-  String liter = 'liter';
-
-  Converter() {
+  // Initialize as Singleton
+  static final Converter _converter = Converter._internal();
+  factory Converter() {
+    return _converter;
+  }
+  Converter._internal() {
     // Volume
     _unitsToML['US_teaspoon'] = 4.9289215937;
     _unitsToML['UK_teaspoon'] = 5.9193880208;
@@ -68,6 +50,30 @@ class Converter {
     _unitsToML['mL'] = 1;
     _unitsToML['liter'] = 1000;
   }
+
+  // Class Public Variables
+  Map<String, double> _unitsToML = Map<String, double>();
+  String usTsp = 'US_teaspoon';
+  String ukTsp = 'UK_teaspoon';
+  String metricTsp = 'Metric_teaspoon';
+  String usTbsp = 'US_tablespoon';
+  String ukTbsp = 'UK_tablespoon';
+  String metricTbsp = 'Metric_tablespoon';
+  String usCup = 'US_cup';
+  String ukCup = 'UK_cup';
+  String metricCup = 'Metric_cup';
+  String usPint = 'US_pint';
+  String ukPint = 'UK_pint';
+  String usQuart = 'US_quart';
+  String ukQuart = 'UK_quart';
+  String usGallon = 'US_gallon';
+  String ukGallon = 'UK_gallon';
+  String usBarrel = 'US_barrel';
+  String ukBarrel = 'UK_barrel';
+  String usFlOunce = 'US_fl_ounce';
+  String ukFlOunce = 'UK_fl_ounce';
+  String mL = 'mL';
+  String liter = 'liter';
 
   double convert(double quantity, String fromUnit, String toUnit) {
     /**
