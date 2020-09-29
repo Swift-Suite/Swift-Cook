@@ -103,17 +103,6 @@ class RecipeListingState extends State<RecipeListing> {
       Ingredient(0, "code", 1.0, "ml"),
       Ingredient(0, "code", 1.0, "ml"),
       Ingredient(0, "code", 1.0, "ml"),
-      Ingredient(0, "code", 1.0, "ml"),
-      Ingredient(0, "code", 1.0, "ml"),
-      Ingredient(0, "code", 1.0, "ml"),
-      Ingredient(0, "code", 1.0, "ml"),
-      Ingredient(0, "code", 1.0, "ml"),
-      Ingredient(0, "code", 1.0, "ml"),
-      Ingredient(0, "code", 1.0, "ml"),
-      Ingredient(0, "code", 1.0, "ml"),
-      Ingredient(0, "code", 1.0, "ml"),
-      Ingredient(0, "code", 1.0, "ml"),
-      Ingredient(0, "code", 1.0, "ml"),
       Ingredient(0, "code", 1.0, "ml")
     ], [
       Instruction(0,
@@ -155,13 +144,13 @@ class RecipeListingState extends State<RecipeListing> {
   }
 
   void editRecipeTitle(String recipeTitle, int recipeID) async {
-    print('-----RecipeTitle: $recipeTitle ------');
+    //print('-----RecipeTitle: $recipeTitle ------');
     String newTitle = recipeTitle;
 
     await getUserText(recipeTitle).then((onValue) {
-      print("------------------------------First------------------------");
+      //print("------------------------------First------------------------");
       if (onValue != null) newTitle = onValue;
-      print("------------------------------Second------------------------");
+      //print("------------------------------Second------------------------");
     });
     int recipeIndex;
     for (int i = 0; i < allRecipes.length; i++) {
