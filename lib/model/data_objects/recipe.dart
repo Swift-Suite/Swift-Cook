@@ -144,11 +144,24 @@ class Recipe extends Serializable {
   void changeIngredient(Ingredient newIngredient, int index){
     ingredientList[index] = newIngredient;
   }
+  void addIngredientAt(Ingredient newIngredient, int index){
+    ingredientList.insert(index, newIngredient);
+  }
+  void deleteIngredientAt(int index){
+    ingredientList.removeAt(index);
+  }
+
   void addInstruction(Instruction newInstruction){
     instructionList.add(newInstruction);
   }
+  void addInstructionAt(Instruction newInstruction, int index){
+    instructionList.insert(index,newInstruction);
+  }
   void changeInstruction(Instruction newInstruction, int index){
     instructionList[index] = newInstruction;
+  }
+  void deleteInstructionAt(int index){
+    instructionList.removeAt(index);
   }
 
 }
