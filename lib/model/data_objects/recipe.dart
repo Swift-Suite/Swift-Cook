@@ -2,9 +2,13 @@
 
 import 'package:swiftcook/model/data_objects/ingredient.dart';
 import 'package:swiftcook/model/data_objects/instruction.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:swiftcook/model/data_objects/serializable.dart';
+import 'package:swiftcook/model/database_manager.dart';
+import '../../swift_exception.dart';
 
 class Recipe extends Serializable {
+  // sql strings ===============================================================
   static const String SQL_INSERT = '''
   INSERT INTO Recipe (Title, ImageUrl) 
   Values (?, ?);
@@ -27,6 +31,10 @@ class Recipe extends Serializable {
   DELETE FROM Recipe WHERE Id = ?
   ''';
 
+  static const String SQL_WHERE_ROWID = '''rowid = ?''';
+
+  // class meta data ===========================================================
+  static final String TAG = "Recipe";
   static final String kId = "rowid";
   static final String kTitle = "title";
   static final String kImageUrl = "imageUrl";
@@ -47,33 +55,32 @@ class Recipe extends Serializable {
   List<Ingredient> ingredientList;
   List<Instruction> instructionList;
 
+  // class creation ============================================================
+  Recipe._();
   Recipe(this.title, this.imageUrl, this.ingredientList, this.instructionList);
 
-  // CRUD stuff
+  @override
+  void initializeFromJson(Map<String, dynamic> json) {
+    this.id = json[Recipe.kId] ?? null;
+    this.title = json[Recipe.kTitle] ?? null;
+    this.imageUrl = json[Recipe.kImageUrl] ?? null;
 
-  static Future<List<Recipe>> retrieveAll() async {
-    return [];
+    this.ingredientList = json[Recipe.kIngredientList] != null
+        ? json[Recipe.kIngredientList]
+            .map((row) => Ingredient.createFromJson(row))
+        : null;
+
+    this.instructionList = json[Recipe.kInstructionList] != null
+        ? json[Recipe.kInstructionList]
+            .map((row) => Instruction.createFromJson(row))
+        : null;
   }
 
-  static Future<Recipe> retrieveByRecipeId(int id) async {}
+  static Recipe createFromJson(Map<String, dynamic> json) {
+    Recipe recipe = new Recipe._();
+    recipe.initializeFromJson(json);
 
-  // returns the int of the inserted record on success, throws exception on error
-  Future<int> dbInsert() async {
-    return 1;
-  }
-
-  // returns true on success, false on failure
-  Future<bool> dbUpdate() async {
-    return true;
-  }
-
-  // returns true on success, false on failure
-  Future<bool> dbDelete() async {
-    return true;
-  }
-
-  List<String> getKeys() {
-    return _keyList;
+    return recipe;
   }
 
   @override
@@ -88,48 +95,80 @@ class Recipe extends Serializable {
   }
 
   @override
-  void initializeFromJson(Map<String, dynamic> json) {}
-
-  static List<Recipe> getTestData() {
-    return [
-      /* Recipe("clean and family friendly", "img.png", [
-        Ingredient("code", 1.0, "ml"),
-        Ingredient("code", 1.0, "ml"),
-        Ingredient("code", 1.0, "ml"),
-        Ingredient("code", 1.0, "ml"),
-        Ingredient("code", 1.0, "ml"),
-        Ingredient("code", 1.0, "ml"),
-        Ingredient("code", 1.0, "ml"),
-        Ingredient("code", 1.0, "ml"),
-        Ingredient("code", 1.0, "ml"),
-        Ingredient("code", 1.0, "ml"),
-        Ingredient("code", 1.0, "ml"),
-        Ingredient("code", 1.0, "ml"),
-        Ingredient("code", 1.0, "ml"),
-        Ingredient("code", 1.0, "ml"),
-        Ingredient("code", 1.0, "ml"),
-        Ingredient("code", 1.0, "ml"),
-        Ingredient("code", 1.0, "ml"),
-        Ingredient("code", 1.0, "ml"),
-        Ingredient("code", 1.0, "ml"),
-        Ingredient("code", 1.0, "ml"),
-        Ingredient("code", 1.0, "ml"),
-        Ingredient("code", 1.0, "ml"),
-        Ingredient("code", 1.0, "ml"),
-        Ingredient("code", 1.0, "ml"),
-      ], [
-        Instruction("talsdfj")
-      ]),
-      Recipe("lkjlkjlkjlkjljk", "img.png", [Ingredient("lkj", 1.0, "ml")],
-          [Instruction("adsfasdf")]),
-      Recipe(
-          "lol xddddddddddddddddd",
-          "img.png",
-          [Ingredient("fffffffffffff", 1.0, "ml")],
-          [Instruction("ffffffffffffff")]),*/
-    ];
+  List<String> getKeys() {
+    return _keyList;
   }
 
+  // lazy fetching of one to many relationship =================================
+  Future<void> fetchIngredients() async {
+    if (this.ingredientList == null)
+      this.ingredientList = await Ingredient.retrieveByRecipeId(this.id);
+  }
+
+  Future<void> fetchInstructions() async {
+    if (this.instructionList == null)
+      this.instructionList = await Instruction.retrieveByRecipeId(this.id);
+  }
+
+  // retrieves =================================================================
+  static Future<Recipe> retrieveByRowid(int rowid) async {
+    Database db = await DatabaseManager.instance.database;
+
+    String whereList = SQL_WHERE_ROWID;
+    String sql = SQL_SELECT + " WHERE " + whereList;
+
+    var result = await db.rawQuery(sql, [rowid]);
+
+    return result != null && result.length > 0
+        ? Recipe.createFromJson(result[0])
+        : null;
+  }
+
+  static Future<List<Recipe>> retrieveAll() async {
+    Database db = await DatabaseManager.instance.database;
+
+    var result = await db.rawQuery(SQL_SELECT);
+
+    return result.map((row) => Recipe.createFromJson(row));
+  }
+
+  // insert ====================================================================
+  Future<int> dbInsert() async {
+    Database db = await DatabaseManager.instance.database;
+    this.id = await db.rawInsert(
+        SQL_INSERT, [this.title, this.imageUrl);
+    return this.id;
+  }
+
+  // update ====================================================================
+  Future<bool> dbUpdate() async {
+    Database db = await DatabaseManager.instance.database;
+    int count = await db
+        .rawUpdate(SQL_UPDATE, [this.title, this.imageUrl, this.id]);
+
+    if (count != 1) {
+      throw new DatabaseWriteException(
+          TAG, "Invalid query made for dbUpdate. actual count: $count");
+    }
+
+    return true;
+  }
+
+  // delete ====================================================================
+  Future<bool> dbDelete() async {
+    Database db = await DatabaseManager.instance.database;
+    int count = await db.rawDelete(SQL_DELETE, [this.id]);
+
+    if (count != 1) {
+      throw new DatabaseWriteException(
+          TAG, "Invalid query made for dbDelete. actual count: $count");
+    }
+
+    return true;
+  }
+
+  // yall this sucks. i think all of these properties can still do their thing
+  // without the need to declare functions
   set name(String newTitle) {
     title = newTitle;
   }

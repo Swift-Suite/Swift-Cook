@@ -105,7 +105,9 @@ class Ingredient extends Serializable {
 
     var result = await db.rawQuery(sql, [rowid]);
 
-    return createFromJson(result[0]);
+    return result != null && result.length > 0
+        ? Ingredient.createFromJson(result[0])
+        : null;
   }
 
   static Future<List<Ingredient>> retrieveByRecipeId(int recipeId) async {

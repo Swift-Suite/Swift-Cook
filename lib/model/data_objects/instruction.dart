@@ -86,7 +86,9 @@ class Instruction extends Serializable {
 
     var result = await db.rawQuery(sql, [rowid]);
 
-    return createFromJson(result[0]);
+    return result != null && result.length > 0
+        ? Instruction.createFromJson(result[0])
+        : null;
   }
 
   static Future<List<Instruction>> retrieveByRecipeId(int recipeId) async {
