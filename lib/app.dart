@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'Pages/edit_page.dart';
+import 'Pages/swift_convert_page.dart';
 import 'Pages/recipes_page.dart';
 
 class AppState extends State<App> {
   int _currentIndex = 0;
   final List<Widget> _navButtons = <Widget>[
     RecipesPage(),
-    Center(
-      child: Text(
-        'Swift Search',
-      ),
-    ),
+    SwiftConvertPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -35,7 +31,7 @@ class AppState extends State<App> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.edit),
-              title: Text('Edit'),
+              title: Text('Convert'),
             ),
           ],
           currentIndex: _currentIndex,
