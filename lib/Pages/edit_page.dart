@@ -1,45 +1,85 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import '../model/data_objects/serializable.dart';
+import 'package:swiftcook/model/data_objects/recipe.dart';
+import 'package:swiftcook/model/data_objects/ingredient.dart';
+import 'package:swiftcook/model/data_objects/instruction.dart';
 
 class EditPage extends StatefulWidget {
+  final Recipe recipe;
+  EditPage({Key key, this.recipe }) : super(key: key);
+
   @override
-  EditPageState createState() => EditPageState();
+  _EditPageState createState() => _EditPageState();
 }
 
-void openPage(BuildContext context) {
-  Navigator.push(context, MaterialPageRoute(
-    builder: (BuildContext context) {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text('This is to see if the button works.'),
-        ),
-        body: const Center(
-          child: Text(
-            '🔥🔥🔥🔥🔥🔥LOLOL69420LOLOL🔥🔥🔥🔥🔥🔥',
-            style: TextStyle(fontSize: 24),
-          ),
-        ),
-      );
-    },
-  ));
-}
-
-class EditPageState extends State<EditPage> {
+class _EditPageState extends State<EditPage>{
   @override
   Widget build(BuildContext context) {
+    //main column
+    List<Ingredient> ingredientList = widget.recipe.ingredientList;
+
+    List<Widget> cBuilder = List<Widget>();
+
+    Size size = MediaQuery.of(context).size;
+
+
+
+    //constructs the
+    // bool divider = false;
+    // for (int i = 0; i < ingredientList.length; i++) {
+    //   var data = ingredientList[i];
+    //   //builds the item to be added to the item builder.
+    //   List<Widget> row = List<Widget>();
+    //   row.add(Container(width:size.width/10, child: Icon(Icons.edit)));
+    //   row.add(Expanded(child:TextFormField(
+    //
+    //   )))
+    //   //adds the row to the column builder
+    //   cBuilder.add(Row(children: row));
+    //   divider = !divider;
+    //   if (divider && i != ingredientList.length - 1) {
+    //     cBuilder.add(Divider());
+    //     divider = !divider;
+    //   }
+    // }
+
+    //print(serializables.length);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Edit"),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: () {
-              openPage(context);
-            },
-          ),
-        ],
+      appBar:AppBar(
+        title: Text(widget.recipe.title),
       ),
-      backgroundColor: Colors.yellow,
+      body: Container(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Column(
+              children: cBuilder,
+            ),
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            color: Colors.lightBlueAccent,
+          )),
     );
   }
+
+// @override
+// Widget build(BuildContext context) {
+//   double height = MediaQuery.of(context).size.height;
+//
+//   return Container(
+//     child: ListView.separated(
+//         itemCount: serializables.length,
+//         separatorBuilder: (BuildContext context, int index) => Divider(),
+//         itemBuilder: (BuildContext context, int index) {
+//           var data = serializables[index].jsonSerialize();
+//           List<Widget> content = data.values.map((value) {
+//             return Expanded(child: Text(value.toString()));
+//           }).toList();
+//
+//           return Row(children: content);
+//         }),
+//     padding: const EdgeInsets.all(8.0),
+//     height: height / 3,
+//   );
+// }
 }

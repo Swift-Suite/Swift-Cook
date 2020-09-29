@@ -1,5 +1,3 @@
-// Author: @tdimhcsleumas
-
 import 'package:flutter/material.dart';
 import '../model/data_objects/serializable.dart';
 
