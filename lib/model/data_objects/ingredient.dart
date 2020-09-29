@@ -25,11 +25,11 @@ class Ingredient extends Serializable {
       Quantity = ?,
       Unit = ?
   WHERE 
-    Id = ?
+    rowid = ?
   ''';
 
   static const String SQL_DELETE = '''
-  DELETE FROM Ingredient WHERE Id = ?
+  DELETE FROM Ingredient WHERE rowid = ?
   ''';
 
   static const String SQL_WHERE_RECIPE_ID = '''WHERE RecipeId = ?''';
@@ -69,8 +69,9 @@ class Ingredient extends Serializable {
 
   Future<int> dbInsert() async {
     Database db = await DatabaseManager.instance.database;
-    return db.rawInsert(
+    this.id = await db.rawInsert(
         SQL_INSERT, [this.recipeId, this.title, this.quantity, this.unit]);
+    return this.id;
   }
 
   Future<bool> dbUpdate() async {
@@ -79,8 +80,8 @@ class Ingredient extends Serializable {
         .rawUpdate(SQL_UPDATE, [this.title, this.quantity, this.unit, this.id]);
 
     if (count != 1) {
-      throw new DatabaseWriteException(
-          TAG, "More than one row was updated on a dbUpdate");
+      throw new DatabaseWriteException(TAG,
+          "More than one row was updated on a dbUpdate. actual count: $count");
     }
 
     return true;
