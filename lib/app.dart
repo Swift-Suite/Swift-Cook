@@ -5,13 +5,12 @@ import 'Pages/recipes_page.dart';
 class AppState extends State<App> {
   int _currentIndex = 0;
   final List<Widget> _navButtons = <Widget>[
+    RecipesPage(),
     Center(
       child: Text(
         'Swift Search',
       ),
     ),
-    RecipesPage(),
-    EditPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -26,10 +25,10 @@ class AppState extends State<App> {
       body: _navButtons[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
           items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              title: Text('Lookup'),
-            ),
+            // BottomNavigationBarItem(
+            //   icon: Icon(Icons.search),
+            //   title: Text('Lookup'),
+            // ),
             BottomNavigationBarItem(
               icon: Icon(Icons.book),
               title: Text('Recipes'),

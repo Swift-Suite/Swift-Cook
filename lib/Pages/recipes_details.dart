@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../model/data_objects/recipe.dart';
 import '../components/serializable_list.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:swiftcook/Pages/edit_page.dart';
 
 class RecipeDetails extends StatelessWidget {
   RecipeDetails({@required this.recipe});
@@ -21,7 +23,18 @@ class RecipeDetails extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(recipe.title),
-        actions: [IconButton(icon: Icon(Icons.edit), onPressed: null)],
+        actions: [IconButton(icon: Icon(Icons.edit),
+            onPressed: () {
+              Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (BuildContext context) {
+                    return EditPage(recipe: recipe);
+                  },
+                ),
+              );
+            }
+        )],
       ),
       body: ListView(padding: const EdgeInsets.all(8.0), children: <Widget>[
         Padding(
