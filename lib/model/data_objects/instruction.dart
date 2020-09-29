@@ -4,10 +4,31 @@ import './serializable.dart';
 import '../database_manager.dart';
 
 class Instruction extends Serializable {
-  static const String SQL_INSERT = '''''';
-  static const String SQL_SELECT = '''''';
-  static const String SQL_UPDATE = '''''';
-  static const String SQL_DELETE = '''''';
+  static const String TAG = "Instruction";
+  static const String SQL_INSERT = '''
+  INSERT INFO Instruction (RecipeID, Content)
+  VALUES (?,?);
+  ''';
+
+  static const String SQL_SELECT = '''
+  SELECT
+    rowid, RecipeID, Content
+  FROM
+    Instruction
+  ''';
+
+  static const String SQL_UPDATE = '''
+    UPDATE Instruction
+    Set Content = ?,
+    Where
+      rowID = ?
+  ''';
+
+  static const String SQL_DELETE = '''
+  DELETE FROM Instruction WHERE rowID = ?
+  ''';
+
+  static const String SQL_WHERE_RECIPE_ID = '''WHERE RecipeID = ?''';
 
   static const String kId = "rowid";
   static const String kRecipeId = "recipeId";

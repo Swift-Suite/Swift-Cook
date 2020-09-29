@@ -1,4 +1,6 @@
 // Author: @tdimhcsleumas
+import 'package:flutter/material.dart';
+
 import './serializable.dart';
 import '../database_manager.dart';
 import 'package:sqflite/sqflite.dart';
@@ -9,7 +11,7 @@ class Ingredient extends Serializable {
   // const strings to be used by the sql calls
   static const String SQL_INSERT = '''
   INSERT INTO Ingredient (RecipeId, Title, Quantity, Unit)
-  VALUES (?,?,?,?);
+  VALUES (?,?,?,?)
   ''';
 
   static const String SQL_SELECT = '''
@@ -25,14 +27,15 @@ class Ingredient extends Serializable {
       Quantity = ?,
       Unit = ?
   WHERE 
-    Id = ?
+    rowid = ?
   ''';
 
   static const String SQL_DELETE = '''
-  DELETE FROM Ingredient WHERE Id = ?
+  DELETE FROM Ingredient WHERE rowid = ?
   ''';
 
   static const String SQL_WHERE_RECIPE_ID = '''WHERE RecipeId = ?''';
+  static const String SQL_WHERE_ROWID = '''WHERE rowid = ?''';
 
   static final String kId = "rowid";
   static final String kRecipeId = "recipeId";
@@ -54,23 +57,39 @@ class Ingredient extends Serializable {
   double quantity;
   String unit;
 
+  Ingredient._();
   Ingredient(this.recipeId, this.title, this.quantity, this.unit);
 
-  // TODO: this later
-  static Future<List<Ingredient>> retrieveByRecipeId(int recipeId) async {
-    return [];
+  static Future<Ingredient> retrieveByRowid(int rowid) async {
+    Database db = await DatabaseManager.instance.database;
+
+    var result = await db.rawQuery(SQL_SELECT + SQL_WHERE_ROWID, [rowid]);
+
+    return createFromJson(result[0]);
   }
 
-  // TODO: clean this up mr schmidt
-  static Future<List<Map<String, dynamic>>> retrieveAll() async {
+  static Future<List<Ingredient>> retrieveByRecipeId(int recipeId) async {
     Database db = await DatabaseManager.instance.database;
-    return db.rawQuery(SQL_SELECT);
+
+    var result =
+        await db.rawQuery(SQL_SELECT + SQL_WHERE_RECIPE_ID, [recipeId]);
+
+    return result.map((row) => Ingredient.createFromJson(row)).toList();
+  }
+
+  static Future<List<Ingredient>> retrieveAll() async {
+    Database db = await DatabaseManager.instance.database;
+
+    var result = await db.rawQuery(SQL_SELECT);
+
+    return result.map((row) => Ingredient.createFromJson(row)).toList();
   }
 
   Future<int> dbInsert() async {
     Database db = await DatabaseManager.instance.database;
-    return db.rawInsert(
+    this.id = await db.rawInsert(
         SQL_INSERT, [this.recipeId, this.title, this.quantity, this.unit]);
+    return this.id;
   }
 
   Future<bool> dbUpdate() async {
@@ -80,7 +99,7 @@ class Ingredient extends Serializable {
 
     if (count != 1) {
       throw new DatabaseWriteException(
-          TAG, "More than one row was updated on a dbUpdate");
+          TAG, "Invalid query made for dbUpdate. actual count: $count");
     }
 
     return true;
@@ -92,10 +111,22 @@ class Ingredient extends Serializable {
 
     if (count != 1) {
       throw new DatabaseWriteException(
-          TAG, "More than one row was updated on a dbDelete");
+          TAG, "Invalid query made for dbDelete. actual count: $count");
     }
 
     return true;
+  }
+
+  static Ingredient createFromJson(Map<String, dynamic> json) {
+    Ingredient ingredient = new Ingredient._();
+
+    ingredient.id = json[Ingredient.kId] ?? null;
+    ingredient.recipeId = json[Ingredient.kRecipeId] ?? null;
+    ingredient.title = json[Ingredient.kTitle] ?? null;
+    ingredient.quantity = json[Ingredient.kQuantity] ?? null;
+    ingredient.unit = json[Ingredient.kUnit] ?? null;
+
+    return ingredient;
   }
 
   @override
