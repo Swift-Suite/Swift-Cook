@@ -6,6 +6,8 @@ import '../database_manager.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../swift_exception.dart';
 
+import 'dart:core';
+
 class Ingredient extends Serializable {
   // sql strings ===============================================================
   static const String SQL_INSERT = '''
@@ -33,8 +35,8 @@ class Ingredient extends Serializable {
   DELETE FROM Ingredient WHERE rowid = ?
   ''';
 
-  static const String SQL_WHERE_RECIPE_ID = '''WHERE RecipeId = ?''';
-  static const String SQL_WHERE_ROWID = '''WHERE rowid = ?''';
+  static const String SQL_WHERE_RECIPE_ID = '''RecipeId = ?''';
+  static const String SQL_WHERE_ROWID = '''rowid = ?''';
 
   // class meta data ===========================================================
   static const String TAG = "Ingredient";
@@ -98,16 +100,23 @@ class Ingredient extends Serializable {
   static Future<Ingredient> retrieveByRowid(int rowid) async {
     Database db = await DatabaseManager.instance.database;
 
-    var result = await db.rawQuery(SQL_SELECT + SQL_WHERE_ROWID, [rowid]);
+    String whereList = SQL_WHERE_ROWID;
+    String sql = SQL_SELECT + " WHERE " + whereList;
 
-    return createFromJson(result[0]);
+    var result = await db.rawQuery(sql, [rowid]);
+
+    return result != null && result.length > 0
+        ? Ingredient.createFromJson(result[0])
+        : null;
   }
 
   static Future<List<Ingredient>> retrieveByRecipeId(int recipeId) async {
     Database db = await DatabaseManager.instance.database;
 
-    var result =
-        await db.rawQuery(SQL_SELECT + SQL_WHERE_RECIPE_ID, [recipeId]);
+    String whereList = SQL_WHERE_RECIPE_ID;
+    String sql = SQL_SELECT + " WHERE " + whereList;
+
+    var result = await db.rawQuery(sql, [recipeId]);
 
     return result.map((row) => Ingredient.createFromJson(row)).toList();
   }

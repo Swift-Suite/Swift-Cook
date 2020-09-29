@@ -60,7 +60,7 @@ class RecipeListingState extends State<RecipeListing> {
   final Recipe selectedRecipe;
   RecipeListingState(this.recipeSelectedCallback, this.selectedRecipe);
 
-  List<Recipe> allRecipes = Recipe.getTestData();
+  List<Recipe> allRecipes = [];
 
   @override
   Widget build(BuildContext context) {
