@@ -2,11 +2,13 @@ import 'package:async/async.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'package:path/path.dart';
+import 'package:swiftcook/swift_exception.dart';
 
 class DatabaseManager {
   // sqlite is funky and assigns rowid's when we do not specify an integer
   // autoincrement field for the primary key. this auto generated field is called
   // the rowid.
+  static const TAG = DatabaseManager;
   static const String SQL_RECIPE_TABLE = '''
   CREATE TABLE Recipe(
     Title TEXT,
@@ -42,16 +44,16 @@ class DatabaseManager {
     if (_database != null) return _database;
 
     _database = await _initDBMemoizer.runOnce(() async {
-      return await _initializeDatabase();
+      return await _initializeDatabase().timeout(const Duration(seconds: 10),
+          onTimeout: () => throw DatabaseConnectionException(TAG,
+              "Time limit exceeded could not open a connection to the database"));
     });
 
     return _database;
   }
 
+  // open the database, create if it does not exist
   Future<Database> _initializeDatabase() async {
-    // i think we may need to copy an existing database file from the assets
-    // to the database path
-
     String databaseFilePath = join(await getDatabasesPath(), 'data.db');
     Database database =
         await openDatabase(databaseFilePath, onCreate: (db, version) {

@@ -25,10 +25,11 @@ class Recipe extends Serializable {
   UPDATE Recipe
   SET Title = ?,
       ImageUrl = ?
+  WHERE rowid = ?
   ''';
 
   static const String SQL_DELETE = '''
-  DELETE FROM Recipe WHERE Id = ?
+  DELETE FROM Recipe WHERE rowid = ?
   ''';
 
   static const String SQL_WHERE_ROWID = '''rowid = ?''';
@@ -36,10 +37,10 @@ class Recipe extends Serializable {
   // class meta data ===========================================================
   static final String TAG = "Recipe";
   static final String kId = "rowid";
-  static final String kTitle = "title";
-  static final String kImageUrl = "imageUrl";
-  static final String kIngredientList = "ingredientList";
-  static final String kInstructionList = "instructionList";
+  static final String kTitle = "Title";
+  static final String kImageUrl = "ImageUrl";
+  static final String kIngredientList = "IngredientList";
+  static final String kInstructionList = "InstructionList";
 
   static final List<String> _keyList = [
     kId,
@@ -68,12 +69,12 @@ class Recipe extends Serializable {
     this.ingredientList = json[Recipe.kIngredientList] != null
         ? json[Recipe.kIngredientList]
             .map((row) => Ingredient.createFromJson(row))
-        : null;
+        : [];
 
     this.instructionList = json[Recipe.kInstructionList] != null
         ? json[Recipe.kInstructionList]
             .map((row) => Instruction.createFromJson(row))
-        : null;
+        : [];
   }
 
   static Recipe createFromJson(Map<String, dynamic> json) {
@@ -129,7 +130,7 @@ class Recipe extends Serializable {
 
     var result = await db.rawQuery(SQL_SELECT);
 
-    return result.map((row) => Recipe.createFromJson(row));
+    return result.map((row) => Recipe.createFromJson(row)).toList();
   }
 
   // insert ====================================================================

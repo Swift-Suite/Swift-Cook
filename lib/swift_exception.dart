@@ -8,6 +8,10 @@ class BaseException implements Exception {
   BaseException(this.context, this.cause);
 }
 
+class DatabaseConnectionException extends BaseException {
+  DatabaseConnectionException(context, cause) : super(context, cause);
+}
+
 class DatabaseWriteException extends BaseException {
   DatabaseWriteException(context, cause) : super(context, cause);
 }

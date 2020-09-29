@@ -118,7 +118,7 @@ Future<void> recipeTest() async {
   bool error = false;
 
   Database db = await DatabaseManager.instance.database;
-  db.rawDelete("DELETE FROM Instruction WHERE rowid > 0");
+  db.rawDelete("DELETE FROM Recipe WHERE rowid > 0");
 
   try {
     Recipe instruction = new Recipe("title", "img.png", [], []);
