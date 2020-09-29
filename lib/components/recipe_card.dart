@@ -5,6 +5,7 @@ class RecipeCard extends StatelessWidget {
   final Recipe recipe;
   final ValueChanged<Recipe> recipeSelectedCallback;
   final Function recipeTitleEditCallback;
+  final Function recipeDeleteCallback;
   //final Widget thumbnail;
   //constructor
   RecipeCard({
@@ -12,7 +13,9 @@ class RecipeCard extends StatelessWidget {
     //this.thumbnail,
     this.recipe,
     this.recipeSelectedCallback,
-    this.recipeTitleEditCallback
+    this.recipeTitleEditCallback,
+    this.recipeDeleteCallback,
+    
   }) : super(key: key);
 
   @override
@@ -62,11 +65,17 @@ class RecipeCard extends StatelessWidget {
                         icon: Icon(Icons.more_vert),
                         onSelected: (String result){
                           if(result == "Rename"){
-                            this.recipeTitleEditCallback(1); //callback to recipePages to modify the title
+                            this.recipeTitleEditCallback(recipe.title, recipe.id); //callback to recipePages to modify the title
                             
                           }
                           else if(result == "Change Image"){
 
+                          }
+                          else if(result == "Edit Recipe"){
+
+                          }
+                          else if(result == "Delete"){
+                            this.recipeDeleteCallback(recipe.id);
                           }
                         },
                         itemBuilder: (BuildContext context){

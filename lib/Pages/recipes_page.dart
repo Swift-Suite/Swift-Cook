@@ -6,6 +6,7 @@ import './recipes_details.dart';
 import '../components/recipe_card.dart';
 import 'package:swiftcook/model/data_objects/ingredient.dart';
 import 'package:swiftcook/model/data_objects/instruction.dart';
+import 'package:swiftcook/components/confirmationAlert.dart';
 
 class RecipesPage extends StatefulWidget {
   @override
@@ -74,7 +75,8 @@ class RecipeListingState extends State<RecipeListing>{
             return RecipeCard(
                 recipe: allRecipes[index],
                 recipeSelectedCallback: recipeSelectedCallback,
-                recipeTitleEditCallback: editRecipeTitle
+                recipeTitleEditCallback: editRecipeTitle,
+                recipeDeleteCallback: deleteRecipe,
                 
                 );
             // return ListTile(
@@ -122,9 +124,42 @@ class RecipeListingState extends State<RecipeListing>{
 
       //database.add(placehold)
   }
+
+  void deleteRecipe(int recipeID) async{
+    int recipeIndex = 0;
+    bool delete = false;
+    await confirmationAlert(context).then((value){
+      if(value != null)
+        delete = value;
+    });
+    if(!delete){
+      return;
+    }
+
+    for(int i = 0 ;i <allRecipes.length; i++){
+      if(allRecipes[i].id == recipeID){
+        recipeIndex = i ;
+        break;
+      }
+    }
+
+    setState((){
+      allRecipes.removeAt(recipeIndex);
+    });
+    //database.delete(recipeIndex)
+  }
   
-  Future<void> editRecipeTitle(int recipeID) async{
-    String newTitle = await getUserText();
+  void editRecipeTitle(String recipeTitle,int recipeID) async{
+    print('-----RecipeTitle: $recipeTitle ------');
+    String newTitle = recipeTitle;
+
+    await getUserText(recipeTitle).then((onValue){
+      print("------------------------------First------------------------");
+      if(onValue != null)
+        newTitle = onValue;
+      print("------------------------------Second------------------------");
+
+    });
     int recipeIndex;
     for(int i = 0; i < allRecipes.length; i++){
       if(allRecipes[i].id == recipeID)
@@ -138,57 +173,28 @@ class RecipeListingState extends State<RecipeListing>{
 
 
 
-  Future<String> getUserText() async{
-    String toRet;
-    var txt = TextEditingController();
-    // showDialog(
-    //     context: context,
-    //     builder: (BuildContext context) {
-    //       return AlertDialog(
-    //         content: Stack(
-    //           overflow: Overflow.visible,
-    //           children: <Widget>[
-    //             Positioned(
-    //               right: -40.0,
-    //               top: -40.0,
-    //               child: InkResponse(
-    //                 onTap: () {
-    //                   Navigator.of(context).pop();
-    //                 },
-    //                 child: CircleAvatar(
-    //                   child: Icon(Icons.close),
-    //                   backgroundColor: Colors.red,
-    //                 ),
-    //               ),
-    //             ),
-    //             Form(
-    //               //key: _formKey,
-    //               child: Column(
-    //                 mainAxisSize: MainAxisSize.min,
-    //                 children: <Widget>[
-    //                   Padding(
-    //                     padding: EdgeInsets.all(8.0),
-    //                     child: TextFormField(
-    //                       controller: txt;
-    //                       //textInputAction: TextInputAction.go
-    //                       ),
-    //                   ),
-    //                   // Padding(
-    //                   //   padding: const EdgeInsets.all(8.0),
-    //                   //   child: RaisedButton(
-    //                   //     child: Text("Submit"),
-    //                   //     onPressed: () {
-    //                   //       //Actual Button Press.
-    //                   //     },
-    //                   //   ),
-    //                   // )
-    //                 ],
-    //               ),
-    //             ),
-    //           ],
-    //         ),
-    //       );
-    //     });
-      return toRet;
+  Future<String> getUserText(String recipeName){
+    TextEditingController txt = TextEditingController(text: recipeName);
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Recipe Name"),
+
+            content: TextFormField(
+              controller: txt,
+            ),
+            actions :<Widget> [
+              MaterialButton(
+                elevation:5.0,
+                child:Text('Save'),
+                onPressed:(){
+                  Navigator.of(context).pop(txt.text.toString());
+                },
+              )
+            ]
+
+          );
+        });
   }
 }
