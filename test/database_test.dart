@@ -80,18 +80,27 @@ Future<void> instructionTest() async {
     int result = await instruction.dbInsert();
     print(result);
 
-    var list = await Ingredient.retrieveAll();
+    print("====== testing retrieves ======");
+    var list = await Instruction.retrieveAll();
     print(list);
+
+    list = await Instruction.retrieveByRecipeId(instruction.recipeId);
+    print(list);
+
+    var record = await Instruction.retrieveByRowId(instruction.id);
+    expect(record.jsonSerialize(), instruction.jsonSerialize());
 
     print("====== testing dbUpdate Instruction ======");
     instruction.content = "Toucha the spaghet";
     bool updateResult = await instruction.dbUpdate();
-    list = await Ingredient.retrieveAll();
+    list = await Instruction.retrieveAll();
     print(list);
 
     print("====== testing dbDelete Instruction ======");
     bool deleteResult = await instruction.dbDelete();
     if (!deleteResult) throw Exception("delete did not return true");
+
+    print(await Instruction.retrieveAll());
   } catch (e) {
     if (e is BaseException) {
       print(e.cause);
