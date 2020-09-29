@@ -3,6 +3,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:swiftcook/model/data_objects/ingredient.dart';
 import 'package:swiftcook/model/data_objects/instruction.dart';
+import 'package:swiftcook/model/data_objects/recipe.dart';
 import 'package:swiftcook/swift_exception.dart';
 
 import '../lib/model/database_manager.dart';
@@ -10,6 +11,7 @@ import '../lib/model/database_manager.dart';
 void main() async {
   test('ingredients should work lol', ingredientTest);
   test('instruction should work lol', instructionTest);
+  test('recipe should work lol', recipeTest);
 }
 
 Future<void> ingredientTest() async {
@@ -67,9 +69,7 @@ Future<void> ingredientTest() async {
 
 Future<void> instructionTest() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   bool error = false;
-
   Database db = await DatabaseManager.instance.database;
   db.rawDelete("DELETE FROM Instruction WHERE rowid > 0");
 
@@ -101,6 +101,50 @@ Future<void> instructionTest() async {
     if (!deleteResult) throw Exception("delete did not return true");
 
     print(await Instruction.retrieveAll());
+  } catch (e) {
+    if (e is BaseException) {
+      print(e.cause);
+    }
+
+    print(e);
+    error = true;
+  }
+  expect(error, false);
+}
+
+Future<void> recipeTest() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  bool error = false;
+
+  Database db = await DatabaseManager.instance.database;
+  db.rawDelete("DELETE FROM Instruction WHERE rowid > 0");
+
+  try {
+    Recipe instruction = new Recipe("title", "img.png", [], []);
+
+    print("====== testing dbInsert Recipe ======");
+    int result = await instruction.dbInsert();
+    print(result);
+
+    print("====== testing retrieves ======");
+    var list = await Recipe.retrieveAll();
+    print(list);
+
+    var record = await Recipe.retrieveByRowId(instruction.id);
+    expect(record.jsonSerialize(), instruction.jsonSerialize());
+
+    print("====== testing dbUpdate Recipe ======");
+    instruction.title = "Toucha the spaghet";
+    bool updateResult = await instruction.dbUpdate();
+    list = await Recipe.retrieveAll();
+    print(list);
+
+    print("====== testing dbDelete Recipe ======");
+    bool deleteResult = await instruction.dbDelete();
+    if (!deleteResult) throw Exception("delete did not return true");
+
+    print(await Recipe.retrieveAll());
   } catch (e) {
     if (e is BaseException) {
       print(e.cause);

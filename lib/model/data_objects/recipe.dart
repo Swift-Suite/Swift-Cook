@@ -111,7 +111,7 @@ class Recipe extends Serializable {
   }
 
   // retrieves =================================================================
-  static Future<Recipe> retrieveByRowid(int rowid) async {
+  static Future<Recipe> retrieveByRowId(int rowid) async {
     Database db = await DatabaseManager.instance.database;
 
     String whereList = SQL_WHERE_ROWID;
@@ -135,16 +135,15 @@ class Recipe extends Serializable {
   // insert ====================================================================
   Future<int> dbInsert() async {
     Database db = await DatabaseManager.instance.database;
-    this.id = await db.rawInsert(
-        SQL_INSERT, [this.title, this.imageUrl);
+    this.id = await db.rawInsert(SQL_INSERT, [this.title, this.imageUrl]);
     return this.id;
   }
 
   // update ====================================================================
   Future<bool> dbUpdate() async {
     Database db = await DatabaseManager.instance.database;
-    int count = await db
-        .rawUpdate(SQL_UPDATE, [this.title, this.imageUrl, this.id]);
+    int count =
+        await db.rawUpdate(SQL_UPDATE, [this.title, this.imageUrl, this.id]);
 
     if (count != 1) {
       throw new DatabaseWriteException(
