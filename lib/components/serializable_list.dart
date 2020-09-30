@@ -23,8 +23,8 @@ class SerializableList extends StatelessWidget {
           Container(width: size.width / 10, child: Icon(Icons.arrow_right)));
 
       List<dynamic> dataList = data.values.toList();
-      for (int i = 0; i < dataList.length; i++) {
-        if (i == 0) {
+      for (int i = 2; i < dataList.length; i++) {
+        if (i == 2) {
           row.add(Expanded(child: Text(dataList[i].toString())));
         } else {
           row.add(Container(
