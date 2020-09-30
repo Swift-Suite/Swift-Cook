@@ -112,7 +112,6 @@ class _IngredientRowState extends State<IngredientRow> {
 
   Widget build(BuildContext context) {
     String dropDownValue = widget.ingredientController.unit;
-    print(widget.ingredientController.nameController.text);
     return Row(
       children:[
         Container(
