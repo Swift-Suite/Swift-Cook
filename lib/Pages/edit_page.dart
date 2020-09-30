@@ -17,32 +17,39 @@ class IngredientController{
   TextEditingController quantityController;
   String unit;
 }
-
-class EditPage extends StatelessWidget {
+class EditPage extends StatefulWidget {
   final Recipe recipe;
   EditPage({Key key, this.recipe}) : super(key: key);
 
-  List<IngredientController> _controllers = new List();
-  bool controllerInit = false;
+  @override
+  _EditPageState createState() => _EditPageState();
+}
+
+class _EditPageState extends State<EditPage> {
+
+   List<IngredientController> _controllers = List<IngredientController>();
+   bool _controllerInit = false;
+  List<Ingredient> ingredientList = List<Ingredient>();
+
   Widget build(BuildContext context) {
     //main column
-    List<Ingredient> ingredientList = this.recipe.ingredientList;
     List<Widget> cBuilder = List<Widget>();
 
-    if(!controllerInit){
+    if(!_controllerInit){
+      ingredientList = widget.recipe.ingredientList;
       for(int i =0; i<ingredientList.length;i++){
         IngredientController controller = IngredientController(ingredientList[i].recipeId,TextEditingController(), ingredientList[i].title, TextEditingController(), ingredientList[i].quantity.toString(), ingredientList[i].unit);
         _controllers.add(controller);
       }
-      controllerInit = !controllerInit;
+      _controllerInit = !_controllerInit;
     }
+
     Size size = MediaQuery.of(context).size;
     bool divider = false;
     for (int i = 0; i < ingredientList.length; i++) {
       Ingredient data = ingredientList[i];
       //Controller Settings;
 
-      print("rebuild");
       //adds the row to the column builder
       cBuilder.add(IngredientRow(ingredientController: _controllers[i],size: size, index:i));
       divider = !divider;
@@ -58,40 +65,50 @@ class EditPage extends StatelessWidget {
           newIngredients.add(Ingredient(x.recipeID,x.nameController.text, double.parse(x.quantityController.text), x.unit));
           print(x.nameController.text);
         }
-
       }
+    void addNewIngredient(){
+      print("adding");
+      setState((){
+        ingredientList.add(Ingredient(widget.recipe.id,"PLACEHOLDER", 1.0, "ml" ));
+        _controllers.add(IngredientController(widget.recipe.id,TextEditingController(), "", TextEditingController(), "1.0" .toString(), "ml"));
+      });
+    }
 
     //print(serializables.length);
     return Scaffold(
       appBar: AppBar(
-        title: Text(this.recipe.title),
+        title: Text(widget.recipe.title),
+        actions: [
+          FlatButton(onPressed: constructNewIngredients, child: Text("Save"))
+        ]
       ),
-      body: ListView(
-        children:<Widget>[ Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 10, left:5, right:5),
-                child: Column(
-                  children: cBuilder,
+      body: ScrollConfiguration(
+        behavior: new ScrollBehavior()..buildViewportChrome(context, null, AxisDirection.down),
+        child: ListView(
+          children:<Widget>[ Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10, bottom: 10, left:5, right:5),
+                  child: Column(
+                    children: cBuilder,
+                  ),
                 ),
-              ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                color: Colors.lightBlueAccent,
-              )),
-        ),
-          MaterialButton(
-            child: Text('Save'),
-            elevation: 5.0,
-            onPressed: (){
-              constructNewIngredients();
-              for(var x in recipe.ingredientList){
-                print(x.title);
-              }
-            }
-          )
-      ]),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  color: Colors.lightBlueAccent,
+                )),
+          ),
+            IconButton(
+              icon: Icon(Icons.add, size: 18),
+              tooltip: 'Add More Ingredients',
+              color: Colors.green,
+              onPressed: () {
+                addNewIngredient();
+              },
+            ),
+        ]),
+      ),
     );
   }
 
@@ -108,6 +125,10 @@ class IngredientRow extends StatefulWidget {
 }
 
 class _IngredientRowState extends State<IngredientRow> {
+  @override
+  void dispose(){
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
