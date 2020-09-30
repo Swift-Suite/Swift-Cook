@@ -22,25 +22,29 @@ class EditPage extends StatelessWidget {
   final Recipe recipe;
   EditPage({Key key, this.recipe}) : super(key: key);
 
-  @override
+  List<IngredientController> _controllers = new List();
+  bool controllerInit = false;
   Widget build(BuildContext context) {
     //main column
     List<Ingredient> ingredientList = this.recipe.ingredientList;
-    List<IngredientController> _controllers = new List();
-
     List<Widget> cBuilder = List<Widget>();
 
+    if(!controllerInit){
+      for(int i =0; i<ingredientList.length;i++){
+        IngredientController controller = IngredientController(ingredientList[i].recipeId,TextEditingController(), ingredientList[i].title, TextEditingController(), ingredientList[i].quantity.toString(), ingredientList[i].unit);
+        _controllers.add(controller);
+      }
+      controllerInit = !controllerInit;
+    }
     Size size = MediaQuery.of(context).size;
     bool divider = false;
     for (int i = 0; i < ingredientList.length; i++) {
       Ingredient data = ingredientList[i];
       //Controller Settings;
 
-      IngredientController controller = IngredientController(data.recipeId,TextEditingController(), data.title, TextEditingController(), data.quantity.toString(), data.unit);
-      _controllers.add(controller);
-
+      print("rebuild");
       //adds the row to the column builder
-      cBuilder.add(IngredientRow(ingredientController: controller,size: size, index:i));
+      cBuilder.add(IngredientRow(ingredientController: _controllers[i],size: size, index:i));
       divider = !divider;
       if (divider && i != ingredientList.length - 1) {
         cBuilder.add(Divider());
@@ -48,12 +52,13 @@ class EditPage extends StatelessWidget {
       }
     }
 
-      List<Ingredient> constructNewIngredients(){
+      void constructNewIngredients(){
         List<Ingredient> newIngredients = List<Ingredient>();
         for(IngredientController x in _controllers){
           newIngredients.add(Ingredient(x.recipeID,x.nameController.text, double.parse(x.quantityController.text), x.unit));
+          print(x.nameController.text);
         }
-        return newIngredients;
+
       }
 
     //print(serializables.length);
@@ -80,8 +85,8 @@ class EditPage extends StatelessWidget {
             child: Text('Save'),
             elevation: 5.0,
             onPressed: (){
-              List<Ingredient> test = constructNewIngredients();
-              for(var x in test){
+              constructNewIngredients();
+              for(var x in recipe.ingredientList){
                 print(x.title);
               }
             }
@@ -90,7 +95,7 @@ class EditPage extends StatelessWidget {
     );
   }
 
-  
+
 }
 
 class IngredientRow extends StatefulWidget {
@@ -103,8 +108,8 @@ class IngredientRow extends StatefulWidget {
 }
 
 class _IngredientRowState extends State<IngredientRow> {
-  @override
 
+  @override
   Widget build(BuildContext context) {
     String dropDownValue = widget.ingredientController.unit;
     return Row(
