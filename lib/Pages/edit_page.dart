@@ -18,19 +18,14 @@ class IngredientController{
   String unit;
 }
 
-class EditPage extends StatefulWidget {
+class EditPage extends StatelessWidget {
   final Recipe recipe;
   EditPage({Key key, this.recipe}) : super(key: key);
 
   @override
-  _EditPageState createState() => _EditPageState();
-}
-
-class _EditPageState extends State<EditPage> {
-  @override
   Widget build(BuildContext context) {
     //main column
-    List<Ingredient> ingredientList = widget.recipe.ingredientList;
+    List<Ingredient> ingredientList = this.recipe.ingredientList;
     List<IngredientController> _controllers = new List();
 
     List<Widget> cBuilder = List<Widget>();
@@ -53,18 +48,18 @@ class _EditPageState extends State<EditPage> {
       }
     }
 
-    List<Ingredient> constructNewIngredients(){
-      List<Ingredient> newIngredients = List<Ingredient>();
-      for(IngredientController x in _controllers){
-        newIngredients.add(Ingredient(x.recipeID,x.nameController.text, double.parse(x.quantityController.text), x.unit));
+      List<Ingredient> constructNewIngredients(){
+        List<Ingredient> newIngredients = List<Ingredient>();
+        for(IngredientController x in _controllers){
+          newIngredients.add(Ingredient(x.recipeID,x.nameController.text, double.parse(x.quantityController.text), x.unit));
+        }
+        return newIngredients;
       }
-      return newIngredients;
-    }
 
     //print(serializables.length);
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.recipe.title),
+        title: Text(this.recipe.title),
       ),
       body: ListView(
         children:<Widget>[ Padding(
@@ -95,7 +90,7 @@ class _EditPageState extends State<EditPage> {
     );
   }
 
-
+  
 }
 
 class IngredientRow extends StatefulWidget {
