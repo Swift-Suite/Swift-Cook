@@ -39,16 +39,18 @@ class _EditPageState extends State<EditPage> {
     }
   }
 
-  Widget build(BuildContext context) {
-    //main column
-    List<Widget> cBuilder = List<Widget>();
-    void constructNewIngredients(){
+  void constructNewIngredients(){
       List<Ingredient> newIngredients = List<Ingredient>();
       for(IngredientController x in _controllers){
         newIngredients.add(Ingredient(x.recipeID,x.nameController.text, double.parse(x.quantityController.text), x.unit));
         print(x.nameController.text);
       }
     }
+
+  Widget build(BuildContext context) {
+    //main column
+    List<Widget> cBuilder = List<Widget>();
+    
     void addNewIngredient(){
       print("adding");
       setState((){
@@ -78,14 +80,7 @@ class _EditPageState extends State<EditPage> {
     }
 
     //print(serializables.length);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.recipe.title),
-        actions: [
-          FlatButton(onPressed: constructNewIngredients, child: Text("Save"))
-        ]
-      ),
-      body: ScrollConfiguration(
+    return ScrollConfiguration(
         behavior: new ScrollBehavior()..buildViewportChrome(context, null, AxisDirection.down),
         child: ListView(
           children:<Widget>[ Padding(
@@ -111,7 +106,6 @@ class _EditPageState extends State<EditPage> {
               },
             ),
         ]),
-      ),
     );
   }
 
