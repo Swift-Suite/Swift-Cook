@@ -2,16 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:swiftcook/model/data_objects/recipe.dart';
 import 'package:swiftcook/model/data_objects/ingredient.dart';
 //import 'package:swiftcook/model/data_objects/instruction.dart';
+import 'package:tuple/tuple.dart';
 
 class IngredientController{
-  IngredientController(int recipeID, TextEditingController nameController, String nameInitial, TextEditingController quantityController, String quantityInitial, String unit){
+  IngredientController(int recipeID, TextEditingController nameController, String nameInitial, TextEditingController quantityController, String quantityInitial, String unit, Tuple2<GlobalKey<FormState>,GlobalKey<FormState>> key){
     this.recipeID = recipeID;
     this.nameController = nameController;
     nameController.text = nameInitial;
     this.quantityController = quantityController;
     quantityController.text = quantityInitial;
     this.unit = unit;
+    this.key1 = key.item1;
+    this.key2 = key.item2;
   }
+  GlobalKey<FormState> key1;
+  GlobalKey<FormState> key2;
   int recipeID;
   TextEditingController nameController;
   TextEditingController quantityController;
@@ -28,13 +33,16 @@ class EditPage extends StatefulWidget {
 class _EditPageState extends State<EditPage> {
 
    List<IngredientController> _controllers = List<IngredientController>();
+   var formKeys = List<Tuple2<GlobalKey<FormState>,GlobalKey<FormState>>>();
 
-  @override
+   @override
   void initState(){
     super.initState();
     List<Ingredient> ingredientList = widget.recipe.ingredientList;
     for(int i =0; i<ingredientList.length;i++){
-      IngredientController controller = IngredientController(ingredientList[i].recipeId,TextEditingController(), ingredientList[i].title, TextEditingController(), ingredientList[i].quantity.toString(), ingredientList[i].unit);
+      var newKey = Tuple2(GlobalKey<FormState>(), GlobalKey<FormState>());
+      formKeys.add(newKey);
+      IngredientController controller = IngredientController(ingredientList[i].recipeId,TextEditingController(), ingredientList[i].title, TextEditingController(), ingredientList[i].quantity.toString(), ingredientList[i].unit, newKey);
       _controllers.add(controller);
     }
   }
@@ -52,8 +60,9 @@ class _EditPageState extends State<EditPage> {
     void addNewIngredient(){
       print("adding");
       setState((){
-        //ingredientList.add(Ingredient(widget.recipe.id,"PLACEHOLDER", 1.0, "ml" ));
-        _controllers.add(IngredientController(widget.recipe.id,TextEditingController(), "", TextEditingController(), "1.0" .toString(), "ml"));
+        var newKey = Tuple2(GlobalKey<FormState>(), GlobalKey<FormState>());
+        formKeys.add(newKey);
+        _controllers.add(IngredientController(widget.recipe.id,TextEditingController(), "", TextEditingController(), "1.0" .toString(), "ml", newKey));
       });
     }
     void removeIngredient(int index){
@@ -160,6 +169,7 @@ class _IngredientRowState extends State<IngredientRow> {
           ),
           Expanded(
             child: TextFormField(
+              key: widget.ingredientController.key1,
               controller: widget.ingredientController.nameController,
               decoration: new InputDecoration(
                 border: OutlineInputBorder(),
@@ -170,6 +180,7 @@ class _IngredientRowState extends State<IngredientRow> {
           Container( //quanity
             padding: const EdgeInsets.symmetric(vertical:5, horizontal:5),
             child: TextFormField(
+              key: widget.ingredientController.key2,
               keyboardType: TextInputType.number,
                 controller: widget.ingredientController.quantityController,
                 decoration: new InputDecoration(
