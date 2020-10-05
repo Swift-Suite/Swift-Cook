@@ -28,57 +28,53 @@ class EditPage extends StatefulWidget {
 class _EditPageState extends State<EditPage> {
 
    List<IngredientController> _controllers = List<IngredientController>();
-   bool _controllerInit = false;
-  List<Ingredient> ingredientList = List<Ingredient>();
+
+  @override
+  void initState(){
+    super.initState();
+    List<Ingredient> ingredientList = widget.recipe.ingredientList;
+    for(int i =0; i<ingredientList.length;i++){
+      IngredientController controller = IngredientController(ingredientList[i].recipeId,TextEditingController(), ingredientList[i].title, TextEditingController(), ingredientList[i].quantity.toString(), ingredientList[i].unit);
+      _controllers.add(controller);
+    }
+  }
 
   Widget build(BuildContext context) {
     //main column
     List<Widget> cBuilder = List<Widget>();
-
-    if(!_controllerInit){
-      ingredientList = widget.recipe.ingredientList;
-      for(int i =0; i<ingredientList.length;i++){
-        IngredientController controller = IngredientController(ingredientList[i].recipeId,TextEditingController(), ingredientList[i].title, TextEditingController(), ingredientList[i].quantity.toString(), ingredientList[i].unit);
-        _controllers.add(controller);
-      }
-      _controllerInit = !_controllerInit;
-    }
-
-    Size size = MediaQuery.of(context).size;
-    bool divider = false;
-    for (int i = 0; i < ingredientList.length; i++) {
-      Ingredient data = ingredientList[i];
-      //Controller Settings;
-
-      //adds the row to the column builder
-      cBuilder.add(IngredientRow(ingredientController: _controllers[i],size: size, index:i));
-      divider = !divider;
-      if (divider && i != ingredientList.length - 1) {
-        cBuilder.add(Divider());
-        divider = !divider;
+    void constructNewIngredients(){
+      List<Ingredient> newIngredients = List<Ingredient>();
+      for(IngredientController x in _controllers){
+        newIngredients.add(Ingredient(x.recipeID,x.nameController.text, double.parse(x.quantityController.text), x.unit));
+        print(x.nameController.text);
       }
     }
-
-      void constructNewIngredients(){
-        List<Ingredient> newIngredients = List<Ingredient>();
-        for(IngredientController x in _controllers){
-          newIngredients.add(Ingredient(x.recipeID,x.nameController.text, double.parse(x.quantityController.text), x.unit));
-          print(x.nameController.text);
-        }
-      }
     void addNewIngredient(){
       print("adding");
       setState((){
-        ingredientList.add(Ingredient(widget.recipe.id,"PLACEHOLDER", 1.0, "ml" ));
+        //ingredientList.add(Ingredient(widget.recipe.id,"PLACEHOLDER", 1.0, "ml" ));
         _controllers.add(IngredientController(widget.recipe.id,TextEditingController(), "", TextEditingController(), "1.0" .toString(), "ml"));
       });
     }
     void removeIngredient(int index){
       print("removing");
       setState((){
-        ingredientList.removeAt(index);
+        //ingredientList.removeAt(index);
         _controllers.removeAt(index);
       });
+    }
+
+    Size size = MediaQuery.of(context).size;
+    bool divider = false;
+    for (int i = 0; i < _controllers.length; i++) {
+      //Controller Settings;
+      //adds the row to the column builder
+      cBuilder.add(IngredientRow(ingredientController: _controllers[i],size: size, index:i,removeAt: removeIngredient, ));
+      divider = !divider;
+      if (divider && i != _controllers.length - 1) {
+        cBuilder.add(Divider());
+        divider = !divider;
+      }
     }
 
     //print(serializables.length);
@@ -153,6 +149,7 @@ class _IngredientRowState extends State<IngredientRow> {
       //),
       direction: DismissDirection.endToStart,
       onDismissed: (direction){
+        print(widget.index);
         widget.removeAt(widget.index);
       },
       child: Row(
@@ -168,7 +165,6 @@ class _IngredientRowState extends State<IngredientRow> {
                 border: OutlineInputBorder(),
               ),
               style: TextStyle(fontSize: 10),
-              //controller: widget.controller,
             )
           ),
           Container( //quanity
