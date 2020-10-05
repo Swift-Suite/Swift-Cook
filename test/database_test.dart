@@ -140,9 +140,6 @@ Future<void> recipeTest() async {
     list = await Recipe.retrieveAll();
     print(list);
 
-    print("====== testing dbDelete Recipe ======");
-    bool deleteResult = await instruction.dbDelete();
-    if (!deleteResult) throw Exception("delete did not return true");
 
     print(await Recipe.retrieveAll());
   } catch (e) {
