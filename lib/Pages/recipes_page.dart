@@ -8,6 +8,7 @@ import '../components/recipe_card.dart';
 import 'package:swiftcook/model/data_objects/ingredient.dart';
 import 'package:swiftcook/model/data_objects/instruction.dart';
 import 'package:swiftcook/components/confirmationAlert.dart';
+import 'package:swiftcook/Pages/recipeViewController.dart';
 
 class RecipesPage extends StatefulWidget {
   @override
@@ -34,7 +35,7 @@ class RecipesPageState extends State<RecipesPage> {
             context,
             CupertinoPageRoute(
               builder: (BuildContext context) {
-                return RecipeDetails(recipe: recipe);
+                return RecipeViewController(recipe: recipe);
               },
             ),
           );
