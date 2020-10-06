@@ -197,60 +197,69 @@ class _EditPageState extends State<EditPage> {
     }
 
     //print(serializables.length);
-    return Scaffold(
-      appBar: AppBar(title: Text(widget.recipe.title), actions: [
-        FlatButton(onPressed: save, child: Text("Save"))
-      ]),
-      body: ScrollConfiguration(
-        behavior: new ScrollBehavior()
-          ..buildViewportChrome(context, null, AxisDirection.down),
-        child: ListView(children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
+    return GestureDetector(
+      onTap: (){
+        FocusScopeNode currentFocus = FocusScope.of(context);
+
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(title: Text(widget.recipe.title), actions: [
+          FlatButton(onPressed: save, child: Text("Save"))
+        ]),
+        body: ScrollConfiguration(
+          behavior: new ScrollBehavior()
+            ..buildViewportChrome(context, null, AxisDirection.down),
+          child: ListView(children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        top: 10, bottom: 10, left: 5, right: 5),
+                    child: Column(
+                      children: ingredientBuilder,
+                    ),
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    color: Colors.lightBlueAccent,
+                  )),
+            ),
+            IconButton(
+              icon: Icon(Icons.add, size: 18),
+              tooltip: 'Add More Ingredients',
+              color: Colors.green,
+              onPressed: () {
+                addNewIngredient();
+              },
+            ),
+            SizedBox(
+              height: 25,
+            ),
+            Container(
                 child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 10, bottom: 10, left: 5, right: 5),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
                   child: Column(
-                    children: ingredientBuilder,
+                    children: instructionBuilder,
                   ),
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
                   color: Colors.lightBlueAccent,
                 )),
-          ),
-          IconButton(
+        IconButton(
             icon: Icon(Icons.add, size: 18),
-            tooltip: 'Add More Ingredients',
+            tooltip: 'Add More instruction',
             color: Colors.green,
             onPressed: () {
-              addNewIngredient();
+              addNewInstruction(); //change
             },
-          ),
-          SizedBox(
-            height: 25,
-          ),
-          Container(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Column(
-                  children: instructionBuilder,
-                ),
-              ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                color: Colors.lightBlueAccent,
-              )),
-      IconButton(
-          icon: Icon(Icons.add, size: 18),
-          tooltip: 'Add More instruction',
-          color: Colors.green,
-          onPressed: () {
-            addNewInstruction(); //change
-          },
-      ),
-        ]),
+        ),
+          ]),
+      )),
     );
   }
 }
